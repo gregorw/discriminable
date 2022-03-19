@@ -8,9 +8,9 @@ class TestDiscriminable < Minitest::Test
     refute_nil ::Discriminable::VERSION
   end
 
-  def test_it_does_something_useful
-    Order.create! state: :submitted
-    Cart.create! state: :open
+  def test_count
+    Order.create! state: :completed
+    Cart.create!
     assert_equal 1, Cart.count
   end
 end

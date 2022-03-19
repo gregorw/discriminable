@@ -41,20 +41,12 @@ module Discriminable
       self.discriminate_types = discriminate_types
     end
 
-    def finder_needs_type_condition?
-      !base_class? && discriminate_types.present?
-    end
-
     def sti_name
       discriminate_type_for_klass(self)
     end
 
     def inheritance_column
       type_column.to_s
-    end
-
-    def sti_type?
-      false
     end
 
     protected
@@ -83,14 +75,10 @@ module Discriminable
     # Creates instances of the appropriate type based on the type attribute. We need to override this so
     # calls like create return an appropriately typed model.
     def subclass_from_attributes(attributes)
+      return unless attributes&.key?(type_column)
+
       klass = klass_for_type(attributes[type_column])
       klass == self ? nil : klass
-    end
-
-    # If attributes exist and contain the type column we want to use the
-    # attributes to build the custom subtype.
-    def subclass_from_attributes?(attributes)
-      attributes.present? && attributes.key?(type_column)
     end
 
     def klass_for_type(type)

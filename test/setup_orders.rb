@@ -9,7 +9,7 @@ end
 class Order < ActiveRecord::Base
   include Discriminable
 
-  enum state: { open: 0, submitted: 1, reviewed: 2, shipped: 3, settled: 4 }
+  enum state: { open: 0, completed: 1 }
 
   uses_type_column :state, discriminate_types: states.keys do |state|
     case state&.to_sym
