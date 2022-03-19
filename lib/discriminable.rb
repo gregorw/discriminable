@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "discriminable/version"
+require 'active_support'
 
 # Source: https://gist.github.com/rlburkes/798e186acb2f93e787a5
 #
@@ -56,6 +57,12 @@ module Discriminable
       false
     end
 
+    protected
+
+    def base_class?
+      self == base_class
+    end
+
     private
 
     # We don't want to let this interface attempt to set type on create/new
@@ -66,10 +73,6 @@ module Discriminable
 
     def discriminate_type_for_klass(klass)
       discriminate_types.each_with_object(Multimap.new) { |type, types| types[klass_for_type(type)] = type }[klass]
-    end
-
-    def base_class?
-      self == base_class
     end
 
     # calls like Model.find(5) return the correct types.
