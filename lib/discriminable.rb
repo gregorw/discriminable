@@ -30,9 +30,10 @@ module Discriminable
     class_attribute :discriminate_types, instance_writer: false
   end
 
+  # Specify the column to use for discrimination.
   module ClassMethods
     def uses_type_column(type_column, discriminate_types: [], &block)
-      raise 'Subclasses should not override .uses_type_column' unless base_class?
+      raise "Subclasses should not override .uses_type_column" unless base_class?
 
       self.type_column = type_column.to_sym
       self.discriminator = block
@@ -97,15 +98,15 @@ module Discriminable
   def populate_with_current_scope_attributes
     return unless self.class.scope_attributes?
 
-    self.class.send(:populatable_scope_attributes).each do |att,value|
+    self.class.send(:populatable_scope_attributes).each do |att, value|
       send("#{att}=", value) if respond_to?("#{att}=")
     end
   end
 
-   def ensure_proper_type
-     klass = self.class
-     if klass.finder_needs_type_condition? && klass.sti_name.count == 1
-       write_attribute(klass.inheritance_column, klass.sti_name.first)
-     end
+  def ensure_proper_type
+    klass = self.class
+    return unless klass.finder_needs_type_condition? && klass.sti_name.count == 1
+
+    write_attribute(klass.inheritance_column, klass.sti_name.first)
   end
 end
