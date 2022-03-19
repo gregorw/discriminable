@@ -72,7 +72,7 @@ module Discriminable
     end
 
     def discriminate_type_for_klass(klass)
-      discriminate_types.each_with_object(Multimap.new) { |type, types| types[klass_for_type(type)] = type }[klass]
+      discriminate_types.each_with_object({}) { |type, types| types[klass_for_type(type)] = type }[klass]
     end
 
     # calls like Model.find(5) return the correct types.
@@ -104,12 +104,5 @@ module Discriminable
     self.class.send(:populatable_scope_attributes).each do |att, value|
       send("#{att}=", value) if respond_to?("#{att}=")
     end
-  end
-
-  def ensure_proper_type
-    klass = self.class
-    return unless klass.finder_needs_type_condition? && klass.sti_name.count == 1
-
-    write_attribute(klass.inheritance_column, klass.sti_name.first)
   end
 end
