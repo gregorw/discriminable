@@ -36,7 +36,8 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run tests
-      run: bundle exec rake test
       env:
         RAILS_VERSION: ${{ matrix.rails }}
+        BUNDLE_FROZEN: false
+    - name: Run tests
+      run: bundle exec rake test
