@@ -41,7 +41,6 @@ jobs:
         RAILS_VERSION: ${{ matrix.rails }}
       run: |
         export BUNDLE_GEMFILE="${GITHUB_WORKSPACE}/gemfiles/rails_${RAILS_VERSION}.gemfile"
-        gem install bundler
         bundle install --jobs 4 --retry 3
 
     - name: Run tests
