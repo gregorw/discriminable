@@ -8,14 +8,26 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Rubocop
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.0.1'
+        bundler-cache: true
+    - name: Run
+      run: bundle exec rake rubocop
+
   build:
     runs-on: ubuntu-latest
-    name: Ruby ${{ matrix.ruby }}
+    name: Ruby ${{ matrix.ruby }} / Rails ${{ matrix.rails }}
     strategy:
       matrix:
-        ruby:
-          - '3.0.1'
-
+        ruby: [2.7, 3.0, 3.1]
+        rails: [5, 6, 7]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -23,5 +35,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - name: Run tests
+      run: bundle exec rake test
+      env:
+        RAILS_VERSION: ${{ matrix.rails }}

@@ -163,9 +163,9 @@ DEPENDENCIES
   byebug
   discriminable!
   minitest (~> 5.15.0)
-  rails (~> 6.1.5)
+  rails (~> 6)
   rubocop (~> 1.26.0)
-  sqlite3
+  sqlite3 (~> 1.4.0)
 
 BUNDLED WITH
    2.3.9
