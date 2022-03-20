@@ -28,6 +28,7 @@ jobs:
       matrix:
         ruby: [2.7, 3.0, 3.1]
         rails: [5, 6, 7]
+      fail-fast: false
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
