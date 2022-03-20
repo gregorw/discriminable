@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "discriminable/version"
-require 'active_support'
+require "active_support"
 
 # Source: https://gist.github.com/rlburkes/798e186acb2f93e787a5
 #
