@@ -31,10 +31,12 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "minitest", "~> 5.15.0"
-  spec.add_development_dependency "rails", "~> #{ENV.fetch("RAILS_VERSION", 6)}"
-  spec.add_development_dependency "rubocop", "~> 1.26.0"
-  spec.add_development_dependency "sqlite3", "~> 1.4.0"
+  spec.add_development_dependency "appraisal"
+  spec.add_development_dependency "byebug"
+  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "rails", ">= 6.0.0"
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "sqlite3"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

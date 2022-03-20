@@ -8,4 +8,6 @@
 /tmp/
 
 .byebug_history
-Gemfile.lock
+
+# Appraisal
+gemfiles/*.gemfile.lock

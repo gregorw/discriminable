@@ -4,5 +4,3 @@ source "https://rubygems.org"
 
 # Specify your gem's dependencies in discriminable.gemspec
 gemspec
-
-gem "byebug"
