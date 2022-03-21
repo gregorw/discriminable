@@ -31,10 +31,11 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_runtime_dependency "rails", ">= 5.0"
+
   spec.add_development_dependency "appraisal"
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "minitest"
-  spec.add_development_dependency "rails", "~> 6.0"
   spec.add_development_dependency "rubocop"
   spec.add_development_dependency "sqlite3"
 
