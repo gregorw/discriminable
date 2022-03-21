@@ -7,5 +7,7 @@ require "minitest/autorun"
 require "active_record"
 require "byebug"
 
+require_relative "./test"
+
 ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
 ActiveRecord::Base.logger = Logger.new($stdout) if ENV.fetch("LOG", false)
