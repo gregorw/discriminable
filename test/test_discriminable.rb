@@ -22,4 +22,15 @@ class TestDiscriminable < Test
       assert_equal 1, Order.open.count
     end
   end
+
+  class Initialization < Test
+    def test_order
+      refute_predicate Order.new, :changed?
+    end
+
+    def test_cart
+      refute_predicate Cart.new, :changed?
+      assert_predicate Cart.new, :open?
+    end
+  end
 end
