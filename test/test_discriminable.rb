@@ -16,10 +16,12 @@ class TestDiscriminable < Test
 
     def test_count
       assert_equal 1, Cart.count
+      assert_instance_of Cart, Cart.first
     end
 
     def test_scopes
       assert_equal 1, Order.open.count
+      assert_instance_of Cart, Order.open.first
     end
   end
 

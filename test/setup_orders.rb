@@ -14,8 +14,8 @@ class Order < ActiveRecord::Base
   enum state: { open: 0, completed: 1 }
 
   uses_type_column :state, discriminate_types: states.keys do |state|
-    case state&.to_sym
-    when :open then Cart
+    case state
+    when states[:open] then Cart
     else Order
     end
   end
