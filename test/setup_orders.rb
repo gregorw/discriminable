@@ -2,12 +2,6 @@
 
 require "active_record"
 
-ActiveRecord::Schema.define do
-  create_table :orders do |t|
-    t.integer :state, limit: 1, default: 0
-  end
-end
-
 class Order < ActiveRecord::Base
   include Discriminable
 

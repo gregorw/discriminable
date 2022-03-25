@@ -10,15 +10,19 @@ class Cart < Order
 end
 
 class TestDiscriminable < Test
-  def setup
-    ActiveRecord::Schema.define do
-      create_table :orders do |t|
-        t.string :type
-      end
+  ActiveRecord::Schema.define do
+    create_table :orders do |t|
+      t.string :type
     end
+  end
 
+  def setup
     Order.create!
     Cart.create!
+  end
+
+  def teardown
+    Order.delete_all
   end
 
   def test_count
@@ -39,5 +43,6 @@ class Initialization < Test
 
   def test_cart
     assert_predicate Cart.new, :changed?
+    assert_equal Cart.new.changes, 'type' => [nil, "Cart"]
   end
 end
