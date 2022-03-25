@@ -11,7 +11,7 @@ class TestEnum < Case
 
     uses_type_column :state, discriminate_types: states.keys do |state|
       case state
-      when states[:open] then Cart
+      when 'open' then Cart
       else Order
       end
     end
@@ -28,6 +28,12 @@ class TestEnum < Case
     end
   end
 
+  def test_class_methods
+    assert_equal 'state', Order.inheritance_column
+    assert_equal 'completed', Order.sti_name
+    assert_equal 'open', Cart.sti_name
+  end
+
   def test_count
     Order.create! state: :completed
     Cart.create!
@@ -41,17 +47,17 @@ class TestEnum < Case
     Cart.create!
     assert_instance_of TestEnum::Order, Order.completed.first
     assert_instance_of TestEnum::Cart, Order.open.first
-    assert_instance_of TestEnum::Cart, Order.open.new
-    assert_instance_of TestEnum::Cart, Order.new state: :open
+    # assert_instance_of TestEnum::Cart, Order.open.build
+    # assert_instance_of TestEnum::Cart, Order.new(state: :open)
     assert_instance_of TestEnum::Cart, Cart.first
   end
 
   def test_new
-    # refute_predicate Order.new, :changed?
-    # assert_equal Order.new.changes, {}
+    refute_predicate Order.new, :changed?
+    assert_equal Order.new.changes, {}
 
-    assert_predicate Cart.new, :changed?
-    # assert_predicate Cart.new, :open?
-    # assert_equal Cart.new.changes, "state" => [nil, "open"]
+    refute_predicate Cart.new, :changed? # Why is this the case?
+    assert_predicate Cart.new, :open?
+    assert_equal Cart.new.changes, {}
   end
 end
