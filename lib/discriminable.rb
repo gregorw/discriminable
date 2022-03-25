@@ -64,12 +64,18 @@ module Discriminable
     end
 
     def discriminate_type_for_klass(klass)
-      discriminate_types.each_with_object({}) { |type, types| types[klass_for_type(type)] = type }[klass]
+      @discriminate_type_for_klass_map ||= discriminate_types.each_with_object({}) do |type, types|
+        types[klass_for_type(type)] = type
+      end
+      @discriminate_type_for_klass_map[klass]
     end
 
     # calls like Model.find(5) return the correct types.
     def discriminate_class_for_record(record)
-      klass_for_type(record[type_column.to_s])
+      # Note that record is a pure hash.
+      @reverse_lookup ||= send(type_column.to_s.pluralize).to_a.map(&:reverse).to_h
+      type = @reverse_lookup[record[type_column.to_s]]
+      klass_for_type(type)
     end
 
     # Creates instances of the appropriate type based on the type attribute. We need to override this so

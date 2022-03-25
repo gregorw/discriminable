@@ -1,0 +1,2 @@
+- [ ] `self.abstract_class = true`
+- [ ] …
