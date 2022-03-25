@@ -1,48 +1,42 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require "helper"
 require "active_record"
 
-class Order < ActiveRecord::Base
-end
+class TestSti < Case
+  class Order < ActiveRecord::Base
+  end
 
-class Cart < Order
-end
-
-class TestDiscriminable < Test
-  ActiveRecord::Schema.define do
-    create_table :orders do |t|
-      t.string :type
-    end
+  class Cart < Order
   end
 
   def setup
+    ActiveRecord::Schema.define do
+      create_table :orders do |t|
+        t.string :type
+      end
+    end
+
     Order.create!
     Cart.create!
   end
 
-  def teardown
-    Order.delete_all
-  end
-
   def test_count
-    assert_equal 1, Cart.count
     assert_equal 2, Order.count
+    assert_equal 1, Cart.count
   end
 
-  def test_scopes
-    assert_instance_of Cart, Cart.first
-    assert_instance_of Order, Order.first
+  def test_kind
+    assert_instance_of TestSti::Order, Order.first
+    assert_instance_of TestSti::Cart, Cart.first
+    assert_instance_of TestSti::Cart, Order.where(type: 'TestSti::Cart').first
   end
-end
 
-class Initialization < Test
-  def test_order
+  def test_new
     refute_predicate Order.new, :changed?
-  end
+    assert_equal Order.new.changes, {}
 
-  def test_cart
     assert_predicate Cart.new, :changed?
-    assert_equal Cart.new.changes, 'type' => [nil, "Cart"]
+    assert_equal Cart.new.changes, 'type' => [nil, "TestSti::Cart"]
   end
 end
