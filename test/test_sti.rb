@@ -19,9 +19,9 @@ class TestSti < Case
   end
 
   def test_class_methods
-    assert_equal Order.inheritance_column, 'type'
-    assert_equal Order.sti_name, 'TestSti::Order'
-    assert_equal Cart.sti_name, 'TestSti::Cart'
+    assert_equal Order.inheritance_column, "type"
+    assert_equal Order.sti_name, "TestSti::Order"
+    assert_equal Cart.sti_name, "TestSti::Cart"
   end
 
   def test_count

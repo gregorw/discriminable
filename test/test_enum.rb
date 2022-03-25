@@ -11,7 +11,7 @@ class TestEnum < Case
 
     uses_type_column :state, discriminate_types: states.keys do |state|
       case state
-      when 'open' then Cart
+      when "open" then Cart
       else Order
       end
     end
@@ -29,9 +29,9 @@ class TestEnum < Case
   end
 
   def test_class_methods
-    assert_equal 'state', Order.inheritance_column
-    assert_equal 'completed', Order.sti_name
-    assert_equal 'open', Cart.sti_name
+    assert_equal "state", Order.inheritance_column
+    assert_equal "completed", Order.sti_name
+    assert_equal "open", Cart.sti_name
   end
 
   def test_count
