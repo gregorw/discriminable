@@ -14,12 +14,10 @@ require "active_support"
 # typed finder methods you can supply an array of 'discriminate_types' that will
 # be used to apply an appropriate type.
 #
-# class MyModel < ActiveRecord::Base
+# class Customer < ActiveRecord::Base
 #   include Discriminable
 #
-#   use_type_column :foobar, discriminate_types: [:rad, :cool] do |my_foobar|
-#     my_foobar == 'rad' ? RadtasticModel : BoringModel
-#   end
+#   discriminate_by state: { lead: "Lead" }
 # end
 #
 module Discriminable
