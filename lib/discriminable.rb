@@ -26,77 +26,58 @@ module Discriminable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :type_column, instance_writer: false
     class_attribute :discriminator, instance_writer: false
-    class_attribute :discriminate_types, instance_writer: false
+    class_attribute :discriminate_map, instance_writer: false
+    class_attribute :discriminate_inverse, instance_writer: false
   end
 
   # Specify the column to use for discrimination.
   module ClassMethods
-    def uses_type_column(type_column, discriminate_types: [], &block)
-      raise "Subclasses should not override .uses_type_column" unless base_class?
+    def discriminate_by(**options)
+      raise "Subclasses should not override .discriminate_by" unless base_class?
 
-      self.type_column = type_column.to_sym
-      self.discriminator = block
-      self.discriminate_types = discriminate_types
+      column, mapping = options.first
+
+      self.discriminator = column
+      self.discriminate_map = mapping.with_indifferent_access
+      self.discriminate_inverse = mapping.invert
+      self.inheritance_column = column.to_s
     end
 
     def sti_name
       discriminate_type_for_klass(self)
     end
 
-    def inheritance_column
-      type_column.to_s
-    end
-
-    protected
-
-    def base_class?
-      self == base_class
-    end
-
     private
 
-    # We don't want to let this interface attempt to set type on create/new
-    # the #ensure_proper_type method will handle it for now.
-    def populatable_scope_attributes
-      scope_attributes.stringify_keys.reject { |k| k == type_column.to_s }
-    end
-
     def discriminate_type_for_klass(klass)
-      @discriminate_type_for_klass_map ||= discriminate_types.each_with_object({}) do |type, types|
-        types[klass_for_type(type)] = type
-      end
-      @discriminate_type_for_klass_map[klass]
+      discriminate_inverse[klass.name]
     end
 
     # calls like Model.find(5) return the correct types.
     def discriminate_class_for_record(record)
-      # Note that record is a pure hash.
-      @reverse_lookup ||= send(type_column.to_s.pluralize).to_a.map(&:reverse).to_h
-      type = @reverse_lookup[record[type_column.to_s]]
-      klass_for_type(type)
+      discriminable_class(record)
     end
 
     # Creates instances of the appropriate type based on the type attribute. We need to override this so
     # calls like create return an appropriately typed model.
     def subclass_from_attributes(attributes)
-      return unless attributes&.key?(type_column)
-
-      klass = klass_for_type(attributes[type_column])
-      klass == self ? nil : klass
+      discriminable_class(attributes)
     end
 
-    def klass_for_type(type)
-      discriminator.call(type)
+    def discriminable_class(attributes)
+      return unless attributes.present?
+
+      value = discriminable_value(attributes[inheritance_column])
+      type_name = discriminate_map[value]
+
+      return self unless type_name
+
+      sti_class_for type_name
     end
-  end
 
-  def populate_with_current_scope_attributes
-    return unless self.class.scope_attributes?
-
-    self.class.send(:populatable_scope_attributes).each do |att, value|
-      send("#{att}=", value) if respond_to?("#{att}=")
+    def discriminable_value(uncast)
+      base_class.type_for_attribute(inheritance_column).cast(uncast)
     end
   end
 end
