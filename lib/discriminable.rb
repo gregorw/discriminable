@@ -66,16 +66,12 @@ module Discriminable
     def discriminable_class(attributes)
       return unless attributes.present?
 
-      value = discriminable_value(attributes[inheritance_column])
+      value = base_class.type_for_attribute(inheritance_column).cast(attributes[inheritance_column])
       type_name = discriminate_map[value]
 
       return self unless type_name
 
       sti_class_for type_name
-    end
-
-    def discriminable_value(uncast)
-      base_class.type_for_attribute(inheritance_column).cast(uncast)
     end
   end
 end
