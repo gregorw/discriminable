@@ -24,7 +24,6 @@ module Discriminable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :discriminator, instance_writer: false
     class_attribute :discriminate_map, instance_writer: false
     class_attribute :discriminate_inverse, instance_writer: false
   end
@@ -36,42 +35,30 @@ module Discriminable
 
       column, mapping = options.first
 
-      self.discriminator = column
       self.discriminate_map = mapping.with_indifferent_access
       self.discriminate_inverse = mapping.invert
       self.inheritance_column = column.to_s
     end
 
     def sti_name
-      discriminate_type_for_klass(self)
+      discriminate_inverse[name]
+    end
+
+    def sti_class_for(value)
+      return self unless (type_name = discriminate_map[value])
+
+      super type_name
     end
 
     private
 
-    def discriminate_type_for_klass(klass)
-      discriminate_inverse[klass.name]
-    end
+    # See active_record/inheritance.rb
+    def subclass_from_attributes(attrs)
+      attrs = attrs.to_h if attrs.respond_to?(:permitted?)
+      return unless attrs.is_a?(Hash)
 
-    # calls like Model.find(5) return the correct types.
-    def discriminate_class_for_record(record)
-      discriminable_class(record)
-    end
-
-    # Creates instances of the appropriate type based on the type attribute. We need to override this so
-    # calls like create return an appropriately typed model.
-    def subclass_from_attributes(attributes)
-      discriminable_class(attributes)
-    end
-
-    def discriminable_class(attributes)
-      return unless attributes.present?
-
-      value = base_class.type_for_attribute(inheritance_column).cast(attributes[inheritance_column])
-      type_name = discriminate_map[value]
-
-      return self unless type_name
-
-      sti_class_for type_name
+      value = base_class.type_for_attribute(inheritance_column).cast(attrs[inheritance_column])
+      sti_class_for(value)
     end
   end
 end
