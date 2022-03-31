@@ -17,7 +17,7 @@ require "active_support"
 # class Customer < ActiveRecord::Base
 #   include Discriminable
 #
-#   discriminable_by state: { lead: "Lead" }
+#   discriminable state: { lead: "Lead" }
 # end
 #
 module Discriminable
@@ -30,8 +30,8 @@ module Discriminable
 
   # Specify the column to use for discrimination.
   module ClassMethods
-    def discriminable_by(**options)
-      raise "Subclasses should not override .discriminable_by" unless base_class?
+    def discriminable(**options)
+      raise "Subclasses should not override .discriminable" unless base_class?
 
       discriminator, map = options.first
 
