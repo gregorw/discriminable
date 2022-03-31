@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### [1.0.1](https://github.com/gregorw/discriminable/compare/v1.0.0...v1.0.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* auto-release to Rubygems and Github ([5741fcb](https://github.com/gregorw/discriminable/commit/5741fcb6381c7392ce323b520bfa474c13bc0168))
+
 ## 1.0.0 (2022-03-31)
 
 
