@@ -24,7 +24,7 @@ module Discriminable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :discriminable, instance_writer: false
+    class_attribute :discriminable_map, instance_writer: false
     class_attribute :discriminable_inverse, instance_writer: false
   end
 
@@ -35,7 +35,7 @@ module Discriminable
 
       discriminator, map = options.first
 
-      self.discriminable = map.with_indifferent_access
+      self.discriminable_map = map.with_indifferent_access
       self.discriminable_inverse = map.invert
       self.inheritance_column = discriminator.to_s
     end
@@ -45,7 +45,7 @@ module Discriminable
     end
 
     def sti_class_for(value)
-      return self unless (type_name = discriminable[value])
+      return self unless (type_name = discriminable_map[value])
 
       super type_name
     end
