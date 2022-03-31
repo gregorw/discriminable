@@ -2,30 +2,16 @@ name: release
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v3
-        id: release
-        with:
-          release-type: ruby
-          package-name: discriminable
-          bump-minor-pre-major: true
-          version-file: lib/discriminable/version.rb
-
       - uses: actions/checkout@v2
-        if: ${{ steps.release.outputs.release_created }}
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: 2.7
-        if: ${{ steps.release.outputs.release_created }}
       - run: bundle install
-        if: ${{ steps.release.outputs.release_created }}
 
       # RubyGems
       - name: publish to RubyGems
@@ -38,7 +24,6 @@ jobs:
           gem push *.gem
         env:
           GEM_HOST_API_KEY: "${{secrets.RUBYGEMS_API_KEY}}"
-        if: ${{ steps.release.outputs.release_created }}
 
       # Github
       - name: Publish to GPR
@@ -52,4 +37,3 @@ jobs:
         env:
           GEM_HOST_API_KEY: "Bearer ${{secrets.GITHUB_TOKEN}}"
           OWNER: ${{ github.repository_owner }}
-        if: ${{ steps.release.outputs.release_created }}
