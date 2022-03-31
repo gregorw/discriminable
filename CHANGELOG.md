@@ -1,5 +1,21 @@
 ## [Unreleased]
 
+## [2.0.0](https://github.com/gregorw/discriminable/compare/v1.0.2...v2.0.0) (2022-03-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* simplified api
+
+### Features
+
+* simplified api ([1b05019](https://github.com/gregorw/discriminable/commit/1b05019dc42aff7fe9ce5c752d7ce8ce09f5b4b7))
+
+
+### Bug Fixes
+
+* tests ([445cb05](https://github.com/gregorw/discriminable/commit/445cb053786c7a862dbeadcaa1af901832465632))
+
 ### [1.0.2](https://github.com/gregorw/discriminable/compare/v1.0.1...v1.0.2) (2022-03-31)
 
 
