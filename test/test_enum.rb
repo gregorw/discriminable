@@ -8,7 +8,7 @@ class TestEnum < Case
     include Discriminable
 
     enum state: { open: 0, completed: 1 }
-    discriminate_by state: { open: "TestEnum::Cart" }
+    discriminable_by state: { open: "TestEnum::Cart" }
   end
 
   class Cart < Order

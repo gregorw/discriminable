@@ -17,35 +17,35 @@ require "active_support"
 # class Customer < ActiveRecord::Base
 #   include Discriminable
 #
-#   discriminate_by state: { lead: "Lead" }
+#   discriminable_by state: { lead: "Lead" }
 # end
 #
 module Discriminable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :discriminate_map, instance_writer: false
-    class_attribute :discriminate_inverse, instance_writer: false
+    class_attribute :discriminable, instance_writer: false
+    class_attribute :discriminable_inverse, instance_writer: false
   end
 
   # Specify the column to use for discrimination.
   module ClassMethods
-    def discriminate_by(**options)
-      raise "Subclasses should not override .discriminate_by" unless base_class?
+    def discriminable_by(**options)
+      raise "Subclasses should not override .discriminable_by" unless base_class?
 
-      column, mapping = options.first
+      discriminator, map = options.first
 
-      self.discriminate_map = mapping.with_indifferent_access
-      self.discriminate_inverse = mapping.invert
-      self.inheritance_column = column.to_s
+      self.discriminable = map.with_indifferent_access
+      self.discriminable_inverse = map.invert
+      self.inheritance_column = discriminator.to_s
     end
 
     def sti_name
-      discriminate_inverse[name]
+      discriminable_inverse[name]
     end
 
     def sti_class_for(value)
-      return self unless (type_name = discriminate_map[value])
+      return self unless (type_name = discriminable[value])
 
       super type_name
     end
