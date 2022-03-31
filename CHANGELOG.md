@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### [1.0.2](https://github.com/gregorw/discriminable/compare/v1.0.1...v1.0.2) (2022-03-31)
+
+
+### Bug Fixes
+
+* otp/mfa for RubyGems ([5e115cc](https://github.com/gregorw/discriminable/commit/5e115ccb7dfe06ccfe18d1ea1462512c9ca59f87))
+
 ### [1.0.1](https://github.com/gregorw/discriminable/compare/v1.0.0...v1.0.1) (2022-03-31)
 
 
