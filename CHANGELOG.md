@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [2.1.0](https://github.com/gregorw/discriminable/compare/v2.0.0...v2.1.0) (2022-04-01)
+
+
+### Features
+
+* discriminable booleans ([f2ce286](https://github.com/gregorw/discriminable/commit/f2ce2867db9b9f0504474d7237faa9caaab96624))
+
 ## [2.0.0](https://github.com/gregorw/discriminable/compare/v1.0.2...v2.0.0) (2022-03-31)
 
 
