@@ -10,7 +10,7 @@ In other words, use any _existing_ model attribute for STI instead of storing cl
 
 **Related work**
 
-The idea was originally described in [“Bye Bye STI, Hello Discriminable Model”](https://www.salsify.com/blog/engineering/bye-bye-sti-hello-discriminable-model) by Randy Burkes.
+The idea was originally described in [“Bye Bye STI, Hello Discriminable Model”](https://www.salsify.com/blog/engineering/bye-bye-sti-hello-discriminable-model) by Randy Burkes and this Gem has started out with [his code](https://gist.github.com/rlburkes/798e186acb2f93e787a5).
 
 
 ## Installation
