@@ -8,7 +8,7 @@ In other words, use any _existing_ model attribute for STI instead of storing cl
 
 **Related work**
 
-The idea was originally described in [“Bye Bye STI, Hello Discriminable Model”](https://www.salsify.com/blog/engineering/bye-bye-sti-hello-discriminable-model) by @rlburkes.
+The idea was originally described in [“Bye Bye STI, Hello Discriminable Model”](https://www.salsify.com/blog/engineering/bye-bye-sti-hello-discriminable-model) by Randy Burkes.
 
 
 ## Installation
