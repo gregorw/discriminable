@@ -46,3 +46,19 @@ jobs:
 
     - name: Run tests
       run: bundle exec rake test
+
+  coverage:
+    runs-on: ubuntu-latest
+    name: Simplecov
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+    - name: Coverage
+      uses: paambaati/codeclimate-action@v2.2.4
+      env:
+        CC_TEST_REPORTER_ID: 5d8e3788e37856a1aa5fa4e6ce3c2aa0d00ca80f3545b6f275b50ad60377716c
+      with:
+        coverageCommand: bundle exec rake test
