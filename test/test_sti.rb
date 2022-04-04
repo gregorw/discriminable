@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "helper"
-require "active_record"
 
 class TestSti < Case
   class Order < ActiveRecord::Base
