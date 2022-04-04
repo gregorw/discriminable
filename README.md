@@ -4,6 +4,12 @@
 
 Single table inheritance (STI) for Ruby on Rails models (ActiveRecord) using enum, boolean, string and integer column types.
 
+In other words, use any _existing_ model attribute for STI instead of storing class names in a `type` column.
+
+**Related work**
+
+The idea was originally described in [“Bye Bye STI, Hello Discriminable Model”](https://www.salsify.com/blog/engineering/bye-bye-sti-hello-discriminable-model) by @rlburkes.
+
 
 ## Installation
 
@@ -34,12 +40,11 @@ end
 class Cart < Order
 end
 
-Order.completed.create
-=> #<Order id: 3, state: "completed">
 Cart.create
 => #<Cart id: 1, state: "open">
 Order.all
-=> #<ActiveRecord::Relation [#<Order id: 1, state: "completed">, #<Cart id: 2, state: "open">]>```
+=> #<ActiveRecord::Relation [#<Cart id: 1, state: "open">]>
+```
 
 
 ## Contributing
