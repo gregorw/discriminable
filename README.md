@@ -2,7 +2,9 @@
 
 # Discriminable
 
-[![Gem Version](https://badge.fury.io/rb/discriminable.svg)](https://rubygems.org/gems/discriminable) [![CI](https://github.com/gregorw/discriminable/actions/workflows/main.yml/badge.svg)](https://github.com/gregorw/discriminable/actions/workflows/main.yml)
+[![Gem Version](https://badge.fury.io/rb/discriminable.svg)](https://rubygems.org/gems/discriminable)
+[![CI](https://github.com/gregorw/discriminable/actions/workflows/main.yml/badge.svg)](https://github.com/gregorw/discriminable/actions/workflows/main.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/maintainability)](https://codeclimate.com/github/gregorw/discriminable/maintainability)
 
 Single table inheritance (STI) for Ruby on Rails models (ActiveRecord) using enum, boolean, string and integer column types.
 
