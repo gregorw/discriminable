@@ -49,6 +49,6 @@ jobs:
 
     - if: matrix.ruby == 3.1 && matrix.rails == 7
       name: Report coverage
-      uses: aktions/codeclimate-test-reporter@v1
-      with:
-        codeclimate-test-reporter-id: ${{ secrets.CC_TEST_REPORTER_ID }}
+      uses: paambaati/codeclimate-action@v3.0.0
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
