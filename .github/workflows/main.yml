@@ -57,8 +57,8 @@ jobs:
     - if: matrix.ruby == 3.1 && matrix.rails == 7
       name: Publish code coverage
       run: |
-        export GIT_BRANCH=$(git branch --show-current)
-        echo $GIT_BRANCH
+        export GIT_BRANCH=$GITHUB_HEAD_REF
+        echo GIT_BRANCH: $GIT_BRANCH
         ./cc-test-reporter after-build
       env:
         CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
