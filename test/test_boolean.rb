@@ -27,27 +27,32 @@ class TestBoolean < Case
   end
 
   def test_count
-    Response.create!
-    Yes.create!
+    Response.create
+    Yes.create
     assert_equal 2, Response.count
     assert_equal 1, Response.where(affirmative: true).count
     assert_equal 1, Yes.count
   end
 
-  def test_kind
-    Response.create!
-    Yes.create!
+  def test_loading
+    Response.create
+    Yes.create
     assert_instance_of TestBoolean::Response, Response.where(affirmative: false).first
     assert_instance_of TestBoolean::Yes, Response.where(affirmative: true).first
-    assert_instance_of TestBoolean::Yes, Response.where(affirmative: true).build
-    # assert_instance_of TestBoolean::Yes, Response.create(affirmative: true)
+    assert_instance_of TestBoolean::Yes, Response.create(affirmative: true)
     assert_instance_of TestBoolean::Yes, Yes.first
   end
 
-  def test_new
-    refute_predicate Response.new, :changed?
-    assert_equal Response.new.changes, {}
+  def test_creating_and_building
+    assert_instance_of TestBoolean::Yes, Response.where(affirmative: true).build
+    assert_instance_of TestBoolean::Yes, Response.new(affirmative: true)
+  end
 
+  def test_changes
+    refute_predicate Response.new, :changed?
+    assert_empty Response.new.changes
+
+    # This is equivalent to STI
     assert_predicate Yes.new, :changed?
     assert_predicate Yes.new, :affirmative?
     assert_equal Yes.new.changes, { "affirmative" => [false, true] }

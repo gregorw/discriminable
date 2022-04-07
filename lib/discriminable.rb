@@ -57,7 +57,8 @@ module Discriminable
       attrs = attrs.to_h if attrs.respond_to?(:permitted?)
       return unless attrs.is_a?(Hash)
 
-      value = base_class.type_for_attribute(inheritance_column).cast(attrs[inheritance_column])
+      value = attrs.with_indifferent_access[inheritance_column]
+      value = base_class.type_for_attribute(inheritance_column).cast(value)
       sti_class_for(value)
     end
   end
