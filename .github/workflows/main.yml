@@ -44,13 +44,18 @@ jobs:
         export BUNDLE_GEMFILE="${GITHUB_WORKSPACE}/gemfiles/rails_${RAILS_VERSION}.gemfile"
         bundle install --jobs 4 --retry 3
 
+    - if: matrix.ruby == 3.1 && matrix.rails == 7
+      name: Setup Code Climate test-reporter
+      run: |
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
+        ./cc-test-reporter before-build
+
     - name: Run tests
       run: bundle exec rake test
 
     - if: matrix.ruby == 3.1 && matrix.rails == 7
-      name: Report coverage
-      uses: paambaati/codeclimate-action@v3.0.0
-      env:
-        CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
-      with:
-        coverageLocations: coverage/.resultset.json:simplecov
+      name: Publish code coverage
+      run: |
+        export GIT_BRANCH="${GITHUB_REF/refs\/heads\//}"
+        ./cc-test-reporter after-build -r ${{secrets.CC_TEST_REPORTER_ID}}
