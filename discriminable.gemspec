@@ -41,6 +41,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "minitest", "~> 5.15"
   spec.add_development_dependency "rubocop", "~> 1.26"
   spec.add_development_dependency "simplecov", "~> 0.21"
-  spec.add_development_dependency "simplecov_json_formatter", "~> 0.1"
   spec.add_development_dependency "sqlite3", "~> 1.4"
 end
