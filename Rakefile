@@ -14,3 +14,8 @@ require "rubocop/rake_task"
 RuboCop::RakeTask.new
 
 task default: %i[test rubocop]
+
+# Release task
+# gem build *.gemspec
+# gem push *.gem
+# rm *.gem
