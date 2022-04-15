@@ -1,4 +1,5 @@
-- [ ] `self.abstract_class = true`
-- [ ] open-closed principle
 - [ ] multiple values per subclass
 - [ ] default to first value when using hash syntax
+- [ ] open-closed principle
+- [ ] test permitted attributes
+- [ ] `self.abstract_class = true`

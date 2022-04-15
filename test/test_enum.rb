@@ -27,29 +27,38 @@ class TestEnum < Case
   end
 
   def test_count
-    Order.create! state: :completed
-    Cart.create!
+    Order.create state: :completed
+    Cart.create
     assert_equal 2, Order.count
     assert_equal 1, Order.open.count
     assert_equal 1, Cart.count
   end
 
-  def test_kind
-    Order.create! state: :completed
-    Cart.create!
+  def test_loading
+    Order.create state: :completed
+    Cart.create
     assert_instance_of TestEnum::Order, Order.completed.first
     assert_instance_of TestEnum::Cart, Order.open.first
-    # assert_instance_of TestEnum::Cart, Order.open.build
-    # assert_instance_of TestEnum::Cart, Order.new(state: :open)
     assert_instance_of TestEnum::Cart, Cart.first
   end
 
-  def test_new
-    refute_predicate Order.new, :changed?
-    assert_equal Order.new.changes, {}
+  def test_creating_and_building
+    assert_instance_of TestEnum::Cart, Order.open.create
+    assert_instance_of TestEnum::Cart, Order.create(state: :open)
+    assert_instance_of TestEnum::Cart, Order.where(state: :open).build
+    assert_instance_of TestEnum::Cart, Order.open.build
+    assert_instance_of TestEnum::Cart, Order.new(state: :open)
+    assert_instance_of TestEnum::Cart, Order.new(state: "open")
+  end
 
-    refute_predicate Cart.new, :changed? # Why is this the case?
+  def test_changes
+    refute_predicate Order.new, :changed?
+    assert_empty Order.new.changes
+
+    # This differs from STI and booleans
+    # TODO: Why exactly is this the case?
+    refute_predicate Cart.new, :changed?
     assert_predicate Cart.new, :open?
-    assert_equal Cart.new.changes, {}
+    assert_empty Cart.new.changes
   end
 end

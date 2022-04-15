@@ -24,24 +24,30 @@ class TestSti < Case
   end
 
   def test_count
-    Order.create!
-    Cart.create!
+    Order.create
+    Cart.create
     assert_equal 2, Order.count
     assert_equal 1, Cart.count
   end
 
-  def test_kind
-    Order.create!
-    Cart.create!
+  def test_loading
+    Order.create
+    Cart.create
     assert_instance_of TestSti::Order, Order.first
     assert_instance_of TestSti::Cart, Cart.first
     assert_instance_of TestSti::Cart, Order.where(type: "TestSti::Cart").first
   end
 
-  def test_new
-    refute_predicate Order.new, :changed?
-    assert_equal Order.new.changes, {}
+  def test_creating_and_building
+    assert_instance_of TestSti::Cart, Order.where(type: "TestSti::Cart").build
+    assert_instance_of TestSti::Cart, Order.new(type: "TestSti::Cart")
+  end
 
+  def test_changes
+    refute_predicate Order.new, :changed?
+    assert_empty Order.new.changes
+
+    # See https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html
     assert_predicate Cart.new, :changed?
     assert_equal Cart.new.changes, "type" => [nil, "TestSti::Cart"]
   end
