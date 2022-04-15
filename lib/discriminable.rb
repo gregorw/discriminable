@@ -25,7 +25,7 @@ module Discriminable
 
   included do
     class_attribute :discriminable_map, instance_writer: false
-    class_attribute :discriminable_inverse, instance_writer: false
+    class_attribute :discriminable_inverse_map, instance_writer: false
   end
 
   # Specify the column to use for discrimination.
@@ -36,12 +36,16 @@ module Discriminable
       discriminator, map = options.first
 
       self.discriminable_map = map.with_indifferent_access
-      self.discriminable_inverse = map.invert
+
+      # Use first key as default discriminator
+      # { a: "C", b: "C" }.invert => { "C" => :b }
+      # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
+      self.discriminable_inverse_map = map.to_a.reverse.to_h.invert
       self.inheritance_column = discriminator.to_s
     end
 
     def sti_name
-      discriminable_inverse[name]
+      discriminable_inverse_map[name]
     end
 
     def sti_class_for(value)
