@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+### [2.1.1](https://github.com/gregorw/discriminable/compare/v2.1.0...v2.1.1) (2022-04-15)
+
+
+### Bug Fixes
+
+* Subclass is not properly initialized on new objects ([c24706c](https://github.com/gregorw/discriminable/commit/c24706c9e8cd4c80ea20016e341f010a5a3c792b))
+* Use correct, i.e. first value, when using multiple states for same subclass ([3a05c0d](https://github.com/gregorw/discriminable/commit/3a05c0d3a76080a39f40b1d57ce2862316693f97))
+
 ## [2.1.0](https://github.com/gregorw/discriminable/compare/v2.0.0...v2.1.0) (2022-04-01)
 
 
