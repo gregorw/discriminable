@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+## [2.2.0](https://github.com/gregorw/discriminable/compare/v2.1.1...v2.2.0) (2022-04-16)
+
+
+### Features
+
+* Alternative syntax respecting open-closed principle ([8a8f885](https://github.com/gregorw/discriminable/commit/8a8f8857dc24753dc08f21b2bfbb7b4317b7ed5c))
+
 ### [2.1.1](https://github.com/gregorw/discriminable/compare/v2.1.0...v2.1.1) (2022-04-15)
 
 
