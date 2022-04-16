@@ -1,5 +1,6 @@
-- [ ] multiple values per subclass
-- [ ] default to first value when using hash syntax
+- [x] multiple values per subclass
+- [x] default to first value when using hash syntax
 - [ ] open-closed principle
+- [ ] use `type` column with enum, int, string, etc.
 - [ ] test permitted attributes
 - [ ] `self.abstract_class = true`
