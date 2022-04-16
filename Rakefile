@@ -16,6 +16,4 @@ RuboCop::RakeTask.new
 task default: %i[test rubocop]
 
 # Release task
-# gem build *.gemspec
-# gem push *.gem
-# rm *.gem
+# gem build *.gemspec && gem push *.gem && rm *.gem
