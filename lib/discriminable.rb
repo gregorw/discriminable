@@ -26,6 +26,8 @@ module Discriminable
   included do
     class_attribute :discriminable_map, instance_writer: false
     class_attribute :discriminable_inverse_map, instance_writer: false
+    class_attribute :discriminable_values, instance_writer: false
+    class_attribute :discriminable_as_descendant_value, instance_writer: false
   end
 
   # Specify the column to use for discrimination.
@@ -33,7 +35,7 @@ module Discriminable
     def discriminable(**options)
       raise "Subclasses should not override .discriminable" unless base_class?
 
-      discriminator, map = options.first
+      attribute, map = options.first
 
       self.discriminable_map = map.with_indifferent_access
 
@@ -41,14 +43,41 @@ module Discriminable
       # { a: "C", b: "C" }.invert => { "C" => :b }
       # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
       self.discriminable_inverse_map = map.to_a.reverse.to_h.invert
-      self.inheritance_column = discriminator.to_s
+      self.inheritance_column = attribute.to_s
+    end
+
+    def discriminable_by(attribute)
+      raise "Subclasses should not override .discriminable_by" unless base_class?
+
+      self.discriminable_as_descendant_value = true
+      self.inheritance_column = attribute.to_s
+    end
+
+    def discriminable_as(*values)
+      raise "Only subclasses should specify .discriminable_as" if base_class?
+
+      self.discriminable_values = values.map do |value|
+        value.instance_of?(Symbol) ? value.to_s : value
+      end
     end
 
     def sti_name
+      if discriminable_as_descendant_value
+        self.discriminable_inverse_map ||= Hash.new do |map, value|
+          map[value] = name.constantize.discriminable_values&.first
+        end
+      end
+
       discriminable_inverse_map[name]
     end
 
     def sti_class_for(value)
+      if discriminable_as_descendant_value
+        self.discriminable_map ||= Hash.new do |map, v|
+          map[v] = descendants.detect { |d| d.discriminable_values.include? v }&.name
+        end
+      end
+
       return self unless (type_name = discriminable_map[value])
 
       super type_name

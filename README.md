@@ -29,12 +29,6 @@ If bundler is not being used to manage dependencies, install the gem by executin
 ## Usage
 
 ```ruby
-ActiveRecord::Schema.define do
-  create_table :orders do |t|
-    t.integer :state, limit: 1, default: 0
-  end
-end
-
 class Order < ActiveRecord::Base
   include Discriminable
 
@@ -43,6 +37,28 @@ class Order < ActiveRecord::Base
 end
 
 class Cart < Order
+end
+
+Cart.create
+=> #<Cart id: 1, state: "open">
+Order.all
+=> #<ActiveRecord::Relation [#<Cart id: 1, state: "open">]>
+```
+
+### Alternative syntax
+
+Instead of defining subclass names within the parent you may prefer to be open for extension but closed for modification (open-closed principle) using the alternative syntax.
+
+```ruby
+class Order < ActiveRecord::Base
+  include Discriminable
+
+  enum state: { open: 0, completed: 1 }
+  discriminable_by :state
+end
+
+class Cart < Order
+  discriminable_as :open
 end
 
 Cart.create
