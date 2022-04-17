@@ -45,19 +45,13 @@ module Discriminable
       self.inheritance_column = attribute.to_s
     end
 
-    # rubocop:disable Metrics/AbcSize
     def discriminable_by(attribute)
       raise "Subclasses should not override .discriminable_by" unless base_class?
 
+      self.discriminable_map ||= discriminable_map_memoized
+      self.discriminable_inverse_map ||= discriminable_inverse_map_memoized
       self.inheritance_column = attribute.to_s
-      self.discriminable_map ||= Hash.new do |map, value|
-        map[value] = discriminable_descendants(value)&.name
-      end
-      self.discriminable_inverse_map ||= Hash.new do |map, value|
-        map[value] = value.constantize.discriminable_values&.first
-      end
     end
-    # rubocop:enable Metrics/AbcSize
 
     def discriminable_as(*values)
       raise "Only subclasses should specify .discriminable_as" if base_class?
@@ -89,8 +83,16 @@ module Discriminable
       sti_class_for(value)
     end
 
-    def discriminable_descendants(value)
-      descendants.detect { |d| d.discriminable_values.include? value }
+    def discriminable_map_memoized
+      Hash.new do |map, value|
+        map[value] = descendants.detect { |d| d.discriminable_values.include? value }&.name
+      end
+    end
+
+    def discriminable_inverse_map_memoized
+      Hash.new do |map, value|
+        map[value] = value.constantize.discriminable_values&.first
+      end
     end
   end
 end
