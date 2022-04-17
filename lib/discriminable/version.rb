@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Discriminable
-  VERSION = "2.2.0"
+  VERSION = "2.2.1"
 end
