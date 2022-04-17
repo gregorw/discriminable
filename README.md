@@ -3,7 +3,7 @@
 # Discriminable
 
 [![Gem Version](https://badge.fury.io/rb/discriminable.svg)](https://rubygems.org/gems/discriminable)
-[![CI](https://github.com/gregorw/discriminable/actions/workflows/main.yml/badge.svg)](https://github.com/gregorw/discriminable/actions/workflows/main.yml)
+[![CI](https://github.com/gregorw/discriminable/actions/workflows/main.yml/badge.svg?event=push)](https://github.com/gregorw/discriminable/actions/workflows/main.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/maintainability)](https://codeclimate.com/github/gregorw/discriminable/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/test_coverage)](https://codeclimate.com/github/gregorw/discriminable/test_coverage)
 
