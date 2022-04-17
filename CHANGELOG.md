@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### [2.2.2](https://github.com/gregorw/discriminable/compare/v2.2.1...v2.2.2) (2022-04-17)
+
+
+### Bug Fixes
+
+* Typo in gemspec uris ([f77253f](https://github.com/gregorw/discriminable/commit/f77253f2cb2f400e04baf3c7bd6083f42ae3aa6b))
+
 ### [2.2.1](https://github.com/gregorw/discriminable/compare/v2.2.0...v2.2.1) (2022-04-17)
 
 
