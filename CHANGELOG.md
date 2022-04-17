@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### [2.2.1](https://github.com/gregorw/discriminable/compare/v2.2.0...v2.2.1) (2022-04-17)
+
+
+### Bug Fixes
+
+* Simplify STI using OCP ([68f49c2](https://github.com/gregorw/discriminable/commit/68f49c2d0b7a9437525fe0bc9ebef1927fccb2e8))
+
 ## [2.2.0](https://github.com/gregorw/discriminable/compare/v2.1.1...v2.2.0) (2022-04-16)
 
 
