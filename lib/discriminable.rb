@@ -27,7 +27,6 @@ module Discriminable
     class_attribute :discriminable_map, instance_writer: false
     class_attribute :discriminable_inverse_map, instance_writer: false
     class_attribute :discriminable_values, instance_writer: false
-    class_attribute :discriminable_as_descendant_value, instance_writer: false
   end
 
   # Specify the column to use for discrimination.
@@ -46,12 +45,19 @@ module Discriminable
       self.inheritance_column = attribute.to_s
     end
 
+    # rubocop:disable Metrics/AbcSize
     def discriminable_by(attribute)
       raise "Subclasses should not override .discriminable_by" unless base_class?
 
-      self.discriminable_as_descendant_value = true
       self.inheritance_column = attribute.to_s
+      self.discriminable_map ||= Hash.new do |map, value|
+        map[value] = discriminable_descendants(value)&.name
+      end
+      self.discriminable_inverse_map ||= Hash.new do |map, value|
+        map[value] = value.constantize.discriminable_values&.first
+      end
     end
+    # rubocop:enable Metrics/AbcSize
 
     def discriminable_as(*values)
       raise "Only subclasses should specify .discriminable_as" if base_class?
@@ -62,22 +68,10 @@ module Discriminable
     end
 
     def sti_name
-      if discriminable_as_descendant_value
-        self.discriminable_inverse_map ||= Hash.new do |map, value|
-          map[value] = name.constantize.discriminable_values&.first
-        end
-      end
-
       discriminable_inverse_map[name]
     end
 
     def sti_class_for(value)
-      if discriminable_as_descendant_value
-        self.discriminable_map ||= Hash.new do |map, v|
-          map[v] = descendants.detect { |d| d.discriminable_values.include? v }&.name
-        end
-      end
-
       return self unless (type_name = discriminable_map[value])
 
       super type_name
@@ -93,6 +87,10 @@ module Discriminable
       value = attrs.with_indifferent_access[inheritance_column]
       value = base_class.type_for_attribute(inheritance_column).cast(value)
       sti_class_for(value)
+    end
+
+    def discriminable_descendants(value)
+      descendants.detect { |d| d.discriminable_values.include? value }
     end
   end
 end
