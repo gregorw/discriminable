@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Discriminable Rails Models"
   spec.description = "Single Table Inheritencs (STI) like functionality using _any_ column, like e.g. enums, etc."
-  spec.homepage = "https://github.com/gregorw/discrimainable"
+  spec.homepage = "https://github.com/gregorw/discriminable"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"
 
