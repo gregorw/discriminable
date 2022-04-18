@@ -1,6 +1,9 @@
 - [x] multiple values per subclass
 - [x] default to first value when using hash syntax
 - [x] open-closed principle
-- [ ] use `type` column with enum, int, string, etc.
+- [ ] Bug: multiple values: Child.all query
+- [ ] more tests / examples
+- [ ] Rails 5 support
 - [ ] test permitted attributes
 - [ ] `self.abstract_class = true`
+- [ ] ~~use `type` column with enum, int, string, etc.~~
