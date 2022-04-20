@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### [2.2.3](https://github.com/gregorw/discriminable/compare/v2.2.2...v2.2.3) (2022-04-20)
+
+
+### Bug Fixes
+
+* Allow to use attribute aliases ([448e4e8](https://github.com/gregorw/discriminable/commit/448e4e81925543f1ee4949898f0ac6628eb2d3fd))
+
 ### [2.2.2](https://github.com/gregorw/discriminable/compare/v2.2.1...v2.2.2) (2022-04-17)
 
 
