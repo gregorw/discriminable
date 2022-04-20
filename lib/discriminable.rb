@@ -36,13 +36,17 @@ module Discriminable
 
       attribute, map = options.first
 
+      # E.g. { value: "ClassName" }
       self.discriminable_map = map.with_indifferent_access
 
       # Use first key as default discriminator
       # { a: "C", b: "C" }.invert => { "C" => :b }
       # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
+      # E.g. { "ClassName" => :value }
       self.discriminable_inverse_map = map.to_a.reverse.to_h.invert
-      self.inheritance_column = attribute.to_s
+
+      attribute = attribute.to_s
+      self.inheritance_column = attribute_aliases[attribute] || attribute
     end
 
     def discriminable_by(attribute)
@@ -50,7 +54,9 @@ module Discriminable
 
       self.discriminable_map ||= discriminable_map_memoized
       self.discriminable_inverse_map ||= discriminable_inverse_map_memoized
-      self.inheritance_column = attribute.to_s
+
+      attribute = attribute.to_s
+      self.inheritance_column = attribute_aliases[attribute] || attribute
     end
 
     def discriminable_as(*values)
@@ -61,6 +67,7 @@ module Discriminable
       end
     end
 
+    # This is the value of the discriminable attribute
     def sti_name
       discriminable_inverse_map[name]
     end
@@ -78,8 +85,7 @@ module Discriminable
       attrs = attrs.to_h if attrs.respond_to?(:permitted?)
       return unless attrs.is_a?(Hash)
 
-      value = attrs.with_indifferent_access[inheritance_column]
-      value = base_class.type_for_attribute(inheritance_column).cast(value)
+      value = discriminable_value(attrs)
       sti_class_for(value)
     end
 
@@ -93,6 +99,13 @@ module Discriminable
       Hash.new do |map, value|
         map[value] = value.constantize.discriminable_values&.first
       end
+    end
+
+    def discriminable_value(attrs)
+      attrs = attrs.with_indifferent_access
+      value = attrs[inheritance_column]
+      value ||= attrs[attribute_aliases.invert[inheritance_column]]
+      base_class.type_for_attribute(inheritance_column).cast(value)
     end
   end
 end

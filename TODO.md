@@ -6,4 +6,5 @@
 - [ ] Rails 5 support
 - [ ] test permitted attributes
 - [ ] `self.abstract_class = true`
+- [ ] scoping…
 - [ ] ~~use `type` column with enum, int, string, etc.~~
