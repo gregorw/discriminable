@@ -72,6 +72,17 @@ module Discriminable
       discriminable_inverse_map[name]
     end
 
+    def sti_names
+      ([self] + descendants).flat_map(&:discriminable_values)
+    end
+
+    def type_condition(table = arel_table)
+      return super unless discriminable_values.present?
+
+      sti_column = table[inheritance_column]
+      predicate_builder.build(sti_column, sti_names)
+    end
+
     def sti_class_for(value)
       return self unless (type_name = discriminable_map[value])
 

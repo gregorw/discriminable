@@ -1,7 +1,7 @@
 - [x] multiple values per subclass
 - [x] default to first value when using hash syntax
 - [x] open-closed principle
-- [ ] Bug: multiple values: Child.all query (double-check)
+- [x] Bug: multiple values: Child.all query (double-check)
 - [ ] Rails 5 support (see rails-5 branch)
 - [ ] rubocop-minitest
 - [ ] more tests / examples

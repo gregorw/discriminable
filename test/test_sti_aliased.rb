@@ -29,7 +29,6 @@ class TestStiAliased < Case
     Order.create
     Cart.create
     assert_equal 2, Order.count
-
     assert_equal 1, Cart.count
   end
 
