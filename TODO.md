@@ -3,6 +3,7 @@
 - [x] open-closed principle
 - [x] Bug: multiple values: Child.all query
 - [ ] more tests / examples
+- [ ] Documentation
 - [ ] Rails 5 support
 - [ ] test permitted attributes
 - [ ] scoping… should work OOTB

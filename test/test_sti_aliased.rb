@@ -38,7 +38,6 @@ class TestStiAliased < Case
     Cart.create
     assert_instance_of TestStiAliased::Order, Order.first
     assert_instance_of TestStiAliased::Cart, Cart.first
-
     assert_instance_of TestStiAliased::Cart, Order.where(type: "TestStiAliased::Cart").first
   end
 

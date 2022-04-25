@@ -7,27 +7,23 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/maintainability)](https://codeclimate.com/github/gregorw/discriminable/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/test_coverage)](https://codeclimate.com/github/gregorw/discriminable/test_coverage)
 
-Single table inheritance (STI) for Ruby on Rails models (ActiveRecord) using enum, boolean, string and integer column types.
+This is a Ruby gem that implements single-table inheritance (STI) for ActiveRecord models using string, integer and boolean column types.
 
-In other words, use any (existing?) model attribute to discriminate between different classes in your class hierarchy. This makes storing class names in a `type` column redundant.
+In other words, use any (existing) model attribute to discriminate between different classes in your class hierarchy. This makes storing class names in a `type` column redundant.
 
 ## Installation
 
-Install the gem and add to the application's Gemfile by executing:
+    bundle add discriminable
 
-    $ bundle add discriminable
+or
 
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install discriminable
+    gem install discriminable
 
 ## Usage
 
 ```ruby
 class Order < ActiveRecord::Base
   include Discriminable
-
-  enum state: { open: 0, completed: 1 }
 
   discriminable_by :state
 end
@@ -44,7 +40,27 @@ Order.all
 
 ## Features
 
-## Aliased attributes
+### Compatible with enums
+
+```ruby
+class Order < ActiveRecord::Base
+  include Discriminable
+
+  enum state: { open: 0, processing: 1, invoiced: 2 }
+
+  discriminable_by :state
+end
+
+class Cart < Order
+  discriminable_as :open
+end
+
+class Invoice < Order
+  discriminable_as :invoiced
+end
+```
+
+### Aliased attributes
 
 In case you are working with a legacy database and cannot change the column name easily it’s easy to reference an aliased attribute in the `discriminable_by` definition.
 
@@ -74,7 +90,8 @@ class OptionProperty < Property
 end
 ```
 
-Note that when creating new records with e.g. `OptionPropert.create` a _default_ value needs to be set in the database for this discriminable class. The Discriminable gem uses the _first_ value in the list as the default value.
+Note that when creating new records with e.g. `OptionProperty.create` a _default_ value needs to be set in the database for this discriminable class. The Discriminable gem uses the _first_ value in the list as the default.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/gregorw/discriminable. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/gregorw/discriminable/blob/main/CODE_OF_CONDUCT.md).
@@ -87,7 +104,7 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 Everyone interacting in the Discriminable project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/gregorw/discriminable/blob/main/CODE_OF_CONDUCT.md).
 
-## Related Work
+## Related work
 
 The idea for this Gem was influenced by [“Bye Bye STI, Hello Discriminable Model”](https://www.salsify.com/blog/engineering/bye-bye-sti-hello-discriminable-model) by Randy Burkes. This Gem has started out with [his code](https://gist.github.com/rlburkes/798e186acb2f93e787a5).
 
