@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+### [2.2.4](https://github.com/gregorw/discriminable/compare/v2.2.3...v2.2.4) (2022-04-25)
+
+
+### Bug Fixes
+
+* changelog url ([3054a1a](https://github.com/gregorw/discriminable/commit/3054a1a0137d8d3cccb55d7f2f06cb392053dab0))
+* support querying when multiple values are provided ([f75190b](https://github.com/gregorw/discriminable/commit/f75190bcf33dcbddf507626bc77aa4709a594f4d))
+
 ### [2.2.3](https://github.com/gregorw/discriminable/compare/v2.2.2...v2.2.3) (2022-04-20)
 
 
