@@ -27,6 +27,13 @@ module Discriminable
     class_attribute :discriminable_map, instance_writer: false
     class_attribute :discriminable_inverse_map, instance_writer: false
     class_attribute :discriminable_values, instance_writer: false
+
+    # Rails 5 support
+    unless method_defined? :base_class?
+      def self.base_class?
+        base_class == self
+      end
+    end
   end
 
   # Specify the column to use for discrimination.
