@@ -20,6 +20,10 @@ class TestOpenClosedPrincipleAliasedInteger < Case
     discriminable_as 2, 3
   end
 
+  class CrazyOptionProperty < OptionProperty
+    discriminable_as 4, 5
+  end
+
   def setup
     ActiveRecord::Schema.define do
       create_table :properties do |t|
@@ -36,8 +40,19 @@ class TestOpenClosedPrincipleAliasedInteger < Case
   def test_creation_and_loading
     assert_equal 1, NumberProperty.create.kind
     assert_equal 2, OptionProperty.create.kind
+    assert_equal 3, OptionProperty.create(kind: 3).kind
     assert_instance_of NumberProperty, Property.first
     assert_instance_of OptionProperty, Property.last
+    assert_equal 2, OptionProperty.all.count
+  end
+
+  def test_sti_names
+    assert_equal (2..5).to_a, OptionProperty.sti_names
+  end
+
+  def test_loading_multiple_values
+    assert_match(/^SELECT.*WHERE.*kind_with_some_postfix.*IN.*#{OptionProperty.sti_names.join('.*')}.*$/,
+                 OptionProperty.all.to_sql)
   end
 
   def test_creation_using_parent
