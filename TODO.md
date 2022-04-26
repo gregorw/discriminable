@@ -2,11 +2,13 @@
 - [x] default to first value when using hash syntax
 - [x] open-closed principle
 - [x] Bug: multiple values: Child.all query (double-check)
-- [ ] Rails 5 support (see rails-5 branch)
+- [x] can we use `type` column? => yes
+- [x] Factory Bot: create :property, kind: 3 => should instantiate a child OptionProperty… => Works if constant OptionProperty is loaded
+- [x] use `type` column with enum, int, string, etc.
+- [x] ~~`self.abstract_class = true` ➔ This results in separate tables~~
 - [ ] rubocop-minitest
-- [ ] more tests / examples
+- [ ] more tests / examples. [alias, non-alias] ⨉ [integer, string, boolean] ⨉ [enum, non-enum] ⨉ [type-column, non-type-column] ⨉ [multiple-values, single-values] ⨉ [subclasses, subsubclasses] ⨉ [hash-syntax, ocp-syntax]
 - [ ] Documentation
 - [ ] test permitted attributes
 - [ ] scoping… should work OOTB
-- [ ] ~~`self.abstract_class = true` ➔ This results in separate tables~~
-- [ ] ~~use `type` column with enum, int, string, etc.~~
+- [ ] Rails 5 support (see rails-5 branch)

@@ -6,12 +6,12 @@ class TestOpenClosedPrinciple < Case
   class Property < ActiveRecord::Base
     include Discriminable
 
-    enum kind: { number: 0, single_option: 1, multi_option: 2, range: 3 }
-    discriminable_by :kind
+    enum type: { value: 0, single_option: 1, multi_option: 2, range: 3 }
+    discriminable_by :type
   end
 
-  class NumberProperty < Property
-    discriminable_as :number
+  class ValueProperty < Property
+    discriminable_as :value
   end
 
   class OptionProperty < Property
@@ -25,25 +25,25 @@ class TestOpenClosedPrinciple < Case
   def setup
     ActiveRecord::Schema.define do
       create_table :properties do |t|
-        t.integer :kind, limit: 1, default: 0
+        t.integer :type, limit: 1, default: 0
       end
     end
   end
 
   def test_sti_name_default
-    assert_equal NumberProperty.sti_name, "number"
+    assert_equal ValueProperty.sti_name, "value"
     assert_equal OptionProperty.sti_name, "single_option"
     assert_equal RangeProperty.sti_name, "range"
   end
 
   def test_creation
-    assert_predicate NumberProperty.create, :number?
+    assert_predicate ValueProperty.create, :value?
     assert_predicate OptionProperty.create, :single_option?
     assert_predicate RangeProperty.create, :range?
   end
 
   def test_building
-    assert_instance_of NumberProperty, Property.number.build
+    assert_instance_of ValueProperty, Property.value.build
     assert_instance_of OptionProperty, Property.multi_option.build
     assert_instance_of RangeProperty, Property.range.build
   end
