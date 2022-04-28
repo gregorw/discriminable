@@ -11,4 +11,5 @@
 - [ ] Documentation
 - [ ] test permitted attributes
 - [ ] scoping… should work OOTB
+- [ ] At least document `.descendants` issue in Rails development: https://stackoverflow.com/questions/29662518/loading-class-descendants-in-rails-development
 - [ ] Rails 5 support (see rails-5 branch)
