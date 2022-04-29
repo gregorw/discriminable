@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### [2.2.5](https://github.com/gregorw/discriminable/compare/v2.2.4...v2.2.5) (2022-04-29)
+
+
+### Bug Fixes
+
+* updated description ([d14f366](https://github.com/gregorw/discriminable/commit/d14f366129b31a0b02d8e2314911a45e20ce1f92))
+
 ### [2.2.4](https://github.com/gregorw/discriminable/compare/v2.2.3...v2.2.4) (2022-04-25)
 
 
