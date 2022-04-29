@@ -6,6 +6,7 @@
 - [x] Factory Bot: create :property, kind: 3 => should instantiate a child OptionProperty… => Works if constant OptionProperty is loaded
 - [x] use `type` column with enum, int, string, etc.
 - [x] ~~`self.abstract_class = true` ➔ This results in separate tables~~
+- [x] What if value is not a “discriminable” value and class cannot be found?
 - [ ] rubocop-minitest
 - [ ] more tests / examples. [alias, non-alias] ⨉ [integer, string, boolean] ⨉ [enum, non-enum] ⨉ [type-column, non-type-column] ⨉ [multiple-values, single-values] ⨉ [subclasses, subsubclasses] ⨉ [hash-syntax, ocp-syntax]
 - [ ] Documentation

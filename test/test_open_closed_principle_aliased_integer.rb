@@ -32,6 +32,11 @@ class TestOpenClosedPrincipleAliasedInteger < Case
     end
   end
 
+  def test_undiscriminable_value
+    Property.create kind: 99
+    assert_instance_of Property, Property.first
+  end
+
   def test_sti_name_default
     assert_equal 1, NumberProperty.sti_name
     assert_equal 2, OptionProperty.sti_name
