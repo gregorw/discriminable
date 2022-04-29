@@ -55,6 +55,11 @@ class TestOpenClosedPrincipleAliasedInteger < Case
                  OptionProperty.all.to_sql)
   end
 
+  def test_sub_class_default_value
+    assert_equal 4, CrazyOptionProperty.create.kind
+    assert_instance_of CrazyOptionProperty, Property.last
+  end
+
   def test_creation_using_parent
     assert_instance_of NumberProperty, Property.create(kind: 1)
     assert_instance_of OptionProperty, Property.create(kind: 3)
