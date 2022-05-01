@@ -26,6 +26,11 @@ class TestBoolean < Case
     assert_equal Yes.sti_name, true
   end
 
+  def test_becomes
+    yes = Yes.create
+    assert_instance_of TestBoolean::Response, yes.becomes!(Response)
+  end
+
   def test_count
     Response.create
     Yes.create

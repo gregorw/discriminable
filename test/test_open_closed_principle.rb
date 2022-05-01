@@ -47,4 +47,12 @@ class TestOpenClosedPrinciple < Case
     assert_instance_of OptionProperty, Property.multi_option.build
     assert_instance_of RangeProperty, Property.range.build
   end
+
+  def test_becomes
+    value = ValueProperty.create
+    range = value.becomes!(RangeProperty)
+    range.save
+    assert_instance_of TestOpenClosedPrinciple::RangeProperty, range
+    assert_instance_of TestOpenClosedPrinciple::RangeProperty, range.reload
+  end
 end

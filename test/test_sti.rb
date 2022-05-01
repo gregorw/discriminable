@@ -9,6 +9,9 @@ class TestSti < Case
   class Cart < Order
   end
 
+  class Invoice < Order
+  end
+
   def setup
     ActiveRecord::Schema.define do
       create_table :orders do |t|
@@ -50,5 +53,13 @@ class TestSti < Case
     # See https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html
     assert_predicate Cart.new, :changed?
     assert_equal Cart.new.changes, "type" => [nil, "TestSti::Cart"]
+  end
+
+  def test_becomes
+    cart = Cart.create
+    invoice = cart.becomes!(Invoice)
+    invoice.save
+    assert_instance_of TestSti::Invoice, invoice
+    assert_instance_of TestSti::Invoice, invoice.reload
   end
 end
