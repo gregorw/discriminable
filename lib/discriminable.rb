@@ -24,9 +24,9 @@ module Discriminable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :discriminable_map, instance_writer: false
-    class_attribute :discriminable_inverse_map, instance_writer: false
-    class_attribute :discriminable_values, instance_writer: false
+    class_attribute :_discriminable_map, instance_writer: false
+    class_attribute :_discriminable_inverse_map, instance_writer: false
+    class_attribute :_discriminable_values, instance_writer: false
   end
 
   # Specify the column to use for discrimination.
@@ -37,13 +37,13 @@ module Discriminable
       attribute, map = options.first
 
       # E.g. { value: "ClassName" }
-      self.discriminable_map = map.with_indifferent_access
+      self._discriminable_map = map.with_indifferent_access
 
       # Use first key as default discriminator
       # { a: "C", b: "C" }.invert => { "C" => :b }
       # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
       # E.g. { "ClassName" => :value }
-      self.discriminable_inverse_map = map.to_a.reverse.to_h.invert
+      self._discriminable_inverse_map = map.to_a.reverse.to_h.invert
 
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
@@ -52,8 +52,8 @@ module Discriminable
     def discriminable_by(attribute)
       raise "Subclasses should not override .discriminable_by" unless base_class?
 
-      self.discriminable_map ||= discriminable_map_memoized
-      self.discriminable_inverse_map ||= discriminable_inverse_map_memoized
+      self._discriminable_map ||= _discriminable_map_memoized
+      self._discriminable_inverse_map ||= _discriminable_inverse_map_memoized
 
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
@@ -62,29 +62,29 @@ module Discriminable
     def discriminable_as(*values)
       raise "Only subclasses should specify .discriminable_as" if base_class?
 
-      self.discriminable_values = values.map do |value|
+      self._discriminable_values = values.map do |value|
         value.instance_of?(Symbol) ? value.to_s : value
       end
     end
 
     # This is the value of the discriminable attribute
     def sti_name
-      discriminable_inverse_map[name]
+      _discriminable_inverse_map[name]
     end
 
     def sti_names
-      ([self] + descendants).flat_map(&:discriminable_values)
+      ([self] + descendants).flat_map(&:_discriminable_values)
     end
 
     def type_condition(table = arel_table)
-      return super unless discriminable_values.present?
+      return super unless _discriminable_values.present?
 
       sti_column = table[inheritance_column]
       predicate_builder.build(sti_column, sti_names)
     end
 
     def sti_class_for(value)
-      return self unless (type_name = discriminable_map[value])
+      return self unless (type_name = _discriminable_map[value])
 
       super type_name
     end
@@ -96,23 +96,23 @@ module Discriminable
       attrs = attrs.to_h if attrs.respond_to?(:permitted?)
       return unless attrs.is_a?(Hash)
 
-      value = discriminable_value(attrs)
+      value = _discriminable_value(attrs)
       sti_class_for(value)
     end
 
-    def discriminable_map_memoized
+    def _discriminable_map_memoized
       Hash.new do |map, value|
-        map[value] = descendants.detect { |d| d.discriminable_values.include? value }&.name
+        map[value] = descendants.detect { |d| d._discriminable_values.include? value }&.name
       end
     end
 
-    def discriminable_inverse_map_memoized
+    def _discriminable_inverse_map_memoized
       Hash.new do |map, value|
-        map[value] = value.constantize.discriminable_values&.first
+        map[value] = value.constantize._discriminable_values&.first
       end
     end
 
-    def discriminable_value(attrs)
+    def _discriminable_value(attrs)
       attrs = attrs.with_indifferent_access
       value = attrs[inheritance_column]
       value ||= attrs[attribute_aliases.invert[inheritance_column]]
