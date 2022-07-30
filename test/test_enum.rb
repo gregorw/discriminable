@@ -7,10 +7,11 @@ class TestEnum < Case
     include Discriminable
 
     enum state: { open: 0, completed: 1 }
-    discriminable state: { open: "TestEnum::Cart" }
+    discriminable_by :state
   end
 
   class Cart < Order
+    discriminable_as :open
   end
 
   def setup
@@ -23,7 +24,7 @@ class TestEnum < Case
 
   def test_class_methods
     assert_equal Order.inheritance_column, "state"
-    assert_equal Cart.sti_name, :open
+    assert_equal Cart.sti_name, "open"
   end
 
   def test_count

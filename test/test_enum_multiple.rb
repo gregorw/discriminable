@@ -7,17 +7,15 @@ class TestEnumMultiple < Case
     include Discriminable
 
     enum state: { open: 0, completed: 1, invoiced: 2, reminded: 3 }
-    discriminable state: {
-      open: "TestEnumMultiple::Cart",
-      invoiced: "TestEnumMultiple::Invoice",
-      reminded: "TestEnumMultiple::Invoice"
-    }
+    discriminable_by :state
   end
 
   class Cart < Order
+    discriminable_as :open
   end
 
   class Invoice < Order
+    discriminable_as :invoiced, :reminded
   end
 
   def setup
@@ -29,7 +27,7 @@ class TestEnumMultiple < Case
   end
 
   def test_sti_name_default
-    assert_equal Invoice.sti_name, :invoiced
+    assert_equal Invoice.sti_name, "invoiced"
   end
 
   def test_default_enum_type
