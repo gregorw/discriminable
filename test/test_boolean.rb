@@ -6,10 +6,11 @@ class TestBoolean < Case
   class Response < ActiveRecord::Base
     include Discriminable
 
-    discriminable affirmative: { true => "TestBoolean::Yes" }
+    discriminable_by :affirmative
   end
 
   class Yes < Response
+    discriminable_as true
   end
 
   def setup

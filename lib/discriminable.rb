@@ -17,7 +17,7 @@ require "active_support"
 # class Customer < ActiveRecord::Base
 #   include Discriminable
 #
-#   discriminable state: { lead: "Lead" }
+#   discriminable_by :state
 # end
 #
 module Discriminable
@@ -31,24 +31,6 @@ module Discriminable
 
   # Specify the column to use for discrimination.
   module ClassMethods
-    def discriminable(**options)
-      raise "Subclasses should not override .discriminable" unless base_class?
-
-      attribute, map = options.first
-
-      # E.g. { value: "ClassName" }
-      self._discriminable_map = map.with_indifferent_access
-
-      # Use first key as default discriminator
-      # { a: "C", b: "C" }.invert => { "C" => :b }
-      # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
-      # E.g. { "ClassName" => :value }
-      self._discriminable_inverse_map = map.to_a.reverse.to_h.invert
-
-      attribute = attribute.to_s
-      self.inheritance_column = attribute_aliases[attribute] || attribute
-    end
-
     def discriminable_by(attribute)
       raise "Subclasses should not override .discriminable_by" unless base_class?
 
@@ -58,6 +40,7 @@ module Discriminable
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
     end
+    # alias_method :discriminable_by, :discriminable_attribute, …:column
 
     def discriminable_as(*values)
       raise "Only subclasses should specify .discriminable_as" if base_class?
@@ -66,6 +49,7 @@ module Discriminable
         value.instance_of?(Symbol) ? value.to_s : value
       end
     end
+    # alias_method :discriminable_as, :discriminable_value
 
     # This is the value of the discriminable attribute
     def sti_name
