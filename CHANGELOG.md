@@ -1,5 +1,22 @@
 ## [Unreleased]
 
+## [3.0.0](https://github.com/gregorw/discriminable/compare/v2.2.5...v3.0.0) (2022-08-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* get rid of legacy hash notation
+
+### Features
+
+* Alternate syntax using attribute/value instead of prepositions ([d0843e4](https://github.com/gregorw/discriminable/commit/d0843e4fdf7d9721c29d7259f5c8f0746d345d9b))
+
+
+### Bug Fixes
+
+* coverage ([bd862a8](https://github.com/gregorw/discriminable/commit/bd862a835fc0239f0ac59cac1e051293b4b547bc))
+* get rid of legacy hash notation ([4feda16](https://github.com/gregorw/discriminable/commit/4feda16be37df14dd159b321d3e45a16127fa922))
+
 ### [2.2.5](https://github.com/gregorw/discriminable/compare/v2.2.4...v2.2.5) (2022-04-29)
 
 
