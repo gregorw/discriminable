@@ -9,7 +9,9 @@
 
 This is a Ruby gem that implements single-table inheritance (STI) for ActiveRecord models using string, integer and boolean column types.
 
-In other words, use any (existing) model attribute to discriminate between different classes in your class hierarchy. This makes storing class names in a `type` column redundant.
+In other words, it allows to use any (existing) model attribute to discriminate between different subclasses in your class hierarchy. This makes storing class names in a `type` column redundant.
+
+Also, it supports aliased attributes and _multiple_ values per subclass.
 
 ## Installation
 
@@ -25,11 +27,11 @@ or
 class Order < ActiveRecord::Base
   include Discriminable
 
-  discriminable_by :state
+  discriminable_attribute :state
 end
 
 class Cart < Order
-  discriminable_as :open
+  discriminable_value :open
 end
 
 Cart.create
@@ -48,21 +50,21 @@ class Order < ActiveRecord::Base
 
   enum state: { open: 0, processing: 1, invoiced: 2 }
 
-  discriminable_by :state
+  discriminable_attribute :state
 end
 
 class Cart < Order
-  discriminable_as :open
+  discriminable_value :open
 end
 
 class Invoice < Order
-  discriminable_as :invoiced
+  discriminable_value :invoiced
 end
 ```
 
 ### Aliased attributes
 
-In case you are working with a legacy database and cannot change the column name easily it’s easy to reference an aliased attribute in the `discriminable_by` definition.
+In case you are working with a legacy database and cannot change the column name easily it’s easy to reference an aliased attribute in the `discriminable_attribute` definition.
 
 ```ruby
 class Property < ActiveRecord::Base
@@ -71,11 +73,11 @@ class Property < ActiveRecord::Base
   alias_attribute :kind, :kind_with_legacy_postfix
 
   # Aliased attributes are supported when specifying the discriminable attribute
-  discriminable_by :kind
+  discriminable_attribute :kind
 end
 
 class NumberProperty < Property
-  discriminable_as 1
+  discriminable_value 1
 end
 ```
 
@@ -86,11 +88,33 @@ Sometimes, in a real project, you may want to map a number of values to a single
 ```ruby
 class OptionProperty < Property
   # The first mention becomes the default value
-  discriminable_as 2, 3, 4
+  discriminable_values 2, 3, 4
 end
 ```
 
 Note that when creating new records with e.g. `OptionProperty.create` a _default_ value needs to be set in the database for this discriminable class. The Discriminable gem uses the _first_ value in the list as the default.
+
+
+### Comparison with standard Rails
+
+
+#### Rails STI
+
+| *values* | string | integer | boolean | enum | decimal | … |
+|--|--|--|--|--|--|--|
+| single | 🟡 `class.name` only | 🔴 |  🔴 |  🔴 |  🔴 |  🔴 |
+| multiple | 🔴 | 🔴 |  🔴 |  🔴 |  🔴 |  🔴 |
+
+#### Discriminable Gem
+
+| *values* | string | integer | boolean | enum | decimal | … |
+|--|--|--|--|--|--| --|
+| single | 🟢 | 🟢 |  🟢 |  🟢 |  🟢 | 🟢 |
+| multiple | 🟢 | 🟢 |  🟢 |  🟢 |  🟢 | 🟢 |
+### Prerequisits
+
+Rails 5+ is required.
+
 
 ## Contributing
 
