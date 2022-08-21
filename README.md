@@ -95,23 +95,26 @@ end
 Note that when creating new records with e.g. `OptionProperty.create` a _default_ value needs to be set in the database for this discriminable class. The Discriminable gem uses the _first_ value in the list as the default.
 
 
-### Comparison with standard Rails
+## Comparison with standard Rails
 
 
-#### Rails STI
+### Rails STI
 
 | *values* | string | integer | boolean | enum | decimal | … |
 |--|--|--|--|--|--|--|
 | single | 🟡 `class.name` only | 🔴 |  🔴 |  🔴 |  🔴 |  🔴 |
 | multiple | 🔴 | 🔴 |  🔴 |  🔴 |  🔴 |  🔴 |
 
-#### Discriminable Gem
+### Discriminable Gem
 
 | *values* | string | integer | boolean | enum | decimal | … |
 |--|--|--|--|--|--| --|
 | single | 🟢 | 🟢 |  🟢 |  🟢 |  🟢 | 🟢 |
 | multiple | 🟢 | 🟢 |  🟢 |  🟢 |  🟢 | 🟢 |
-### Prerequisits
+
+“Multiple” means that more than one value can map to a single subclass. This may or may not be useful for your use case. In standard Rails, the a single class name obviously maps to a single class.
+
+## Prerequisits
 
 Rails 5+ is required.
 
