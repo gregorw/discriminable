@@ -29,8 +29,12 @@ module Discriminable
     class_attribute :_discriminable_values, instance_writer: false
   end
 
-  # Specify the column to use for discrimination.
+  # This adds
+  # - `discriminable_attribute` and
+  # - `discriminalbe_value`
+  # class methods (plus some aliases).
   module ClassMethods
+    # Specify the attribute/column at the root class to use for discrimination.
     def discriminable_by(attribute)
       raise "Subclasses should not override .discriminable_by" unless base_class?
 
@@ -40,8 +44,17 @@ module Discriminable
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
     end
-    # alias_method :discriminable_by, :discriminable_attribute, …:column
 
+    # “Aliases” for discriminable_by
+    def discriminable_attribute(attribute)
+      discriminable_by(attribute)
+    end
+
+    def discriminable_on(attribute)
+      discriminable_by(attribute)
+    end
+
+    # Specify the values the subclass corresponds to.
     def discriminable_as(*values)
       raise "Only subclasses should specify .discriminable_as" if base_class?
 
@@ -49,7 +62,14 @@ module Discriminable
         value.instance_of?(Symbol) ? value.to_s : value
       end
     end
-    # alias_method :discriminable_as, :discriminable_value
+
+    def discriminable_value(*values)
+      discriminable_as(*values)
+    end
+
+    def discriminable_values(*values)
+      discriminable_as(*values)
+    end
 
     # This is the value of the discriminable attribute
     def sti_name
