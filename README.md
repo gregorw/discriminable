@@ -114,7 +114,7 @@ Note that when creating new records with e.g. `OptionProperty.create` a _default
 
 “Multiple” means that more than one value can map to a single subclass. This may or may not be useful for your use case. In standard Rails, the a single class name obviously maps to a single class.
 
-## Prerequisits
+## Prerequisites
 
 Rails 5+ is required.
 
