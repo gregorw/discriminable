@@ -44,15 +44,8 @@ module Discriminable
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
     end
-
-    # “Aliases” for discriminable_by
-    def discriminable_attribute(attribute)
-      discriminable_by(attribute)
-    end
-
-    def discriminable_on(attribute)
-      discriminable_by(attribute)
-    end
+    alias discriminable_attribute discriminable_by
+    alias discriminable_on discriminable_by
 
     # Specify the values the subclass corresponds to.
     def discriminable_as(*values)
@@ -62,14 +55,8 @@ module Discriminable
         value.instance_of?(Symbol) ? value.to_s : value
       end
     end
-
-    def discriminable_value(*values)
-      discriminable_as(*values)
-    end
-
-    def discriminable_values(*values)
-      discriminable_as(*values)
-    end
+    alias discriminable_value discriminable_as
+    alias discriminable_values discriminable_as
 
     # This is the value of the discriminable attribute
     def sti_name
