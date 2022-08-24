@@ -17,7 +17,7 @@ require "active_support"
 # class Customer < ActiveRecord::Base
 #   include Discriminable
 #
-#   discriminable_by :state
+#   discriminable_attribute :state
 # end
 #
 module Discriminable
@@ -35,8 +35,8 @@ module Discriminable
   # class methods (plus some aliases).
   module ClassMethods
     # Specify the attribute/column at the root class to use for discrimination.
-    def discriminable_by(attribute)
-      raise "Subclasses should not override .discriminable_by" unless base_class?
+    def discriminable_attribute(attribute)
+      raise "Subclasses should not override .discriminable_attribute" unless base_class?
 
       self._discriminable_map ||= _discriminable_map_memoized
       self._discriminable_inverse_map ||= _discriminable_inverse_map_memoized
@@ -44,32 +44,19 @@ module Discriminable
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
     end
-
-    # “Aliases” for discriminable_by
-    def discriminable_attribute(attribute)
-      discriminable_by(attribute)
-    end
-
-    def discriminable_on(attribute)
-      discriminable_by(attribute)
-    end
+    alias discriminable_by discriminable_attribute
+    alias discriminable_on discriminable_attribute
 
     # Specify the values the subclass corresponds to.
-    def discriminable_as(*values)
-      raise "Only subclasses should specify .discriminable_as" if base_class?
+    def discriminable_value(*values)
+      raise "Only subclasses should specify .discriminable_value" if base_class?
 
       self._discriminable_values = values.map do |value|
         value.instance_of?(Symbol) ? value.to_s : value
       end
     end
-
-    def discriminable_value(*values)
-      discriminable_as(*values)
-    end
-
-    def discriminable_values(*values)
-      discriminable_as(*values)
-    end
+    alias discriminable_values discriminable_value
+    alias discriminable_as discriminable_value
 
     # This is the value of the discriminable attribute
     def sti_name

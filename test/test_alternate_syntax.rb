@@ -7,15 +7,15 @@ class TestAlternateSyntax < Case
     include Discriminable
 
     enum type: { value: 0, single_option: 1, multi_option: 2, range: 3 }
-    discriminable_attribute :type
+    discriminable_by :type
   end
 
   class ValueProperty < Property
-    discriminable_value :value
+    discriminable_as :value
   end
 
   class OptionProperty < Property
-    discriminable_values :single_option, :multi_option
+    discriminable_as :single_option, :multi_option
   end
 
   def setup
