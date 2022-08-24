@@ -11,11 +11,11 @@ class TestEnumMultiple < Case
   end
 
   class Cart < Order
-    discriminable_as :open
+    discriminable_value :open
   end
 
   class Invoice < Order
-    discriminable_as :invoiced, :reminded
+    discriminable_value :invoiced, :reminded
   end
 
   def setup

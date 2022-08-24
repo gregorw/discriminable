@@ -11,7 +11,7 @@ class TestEnum < Case
   end
 
   class Cart < Order
-    discriminable_as :open
+    discriminable_value :open
   end
 
   def setup

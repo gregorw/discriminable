@@ -10,7 +10,7 @@ class TestBoolean < Case
   end
 
   class Yes < Response
-    discriminable_as true
+    discriminable_value true
   end
 
   def setup

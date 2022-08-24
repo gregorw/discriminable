@@ -11,11 +11,11 @@ class TestAlternateSyntax < Case
   end
 
   class ValueProperty < Property
-    discriminable_value :value
+    discriminable_as :value
   end
 
   class OptionProperty < Property
-    discriminable_values :single_option, :multi_option
+    discriminable_as :single_option, :multi_option
   end
 
   def setup

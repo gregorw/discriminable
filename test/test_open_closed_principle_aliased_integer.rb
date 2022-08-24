@@ -13,15 +13,15 @@ class TestOpenClosedPrincipleAliasedInteger < Case
   end
 
   class NumberProperty < Property
-    discriminable_as 1
+    discriminable_value 1
   end
 
   class OptionProperty < Property
-    discriminable_as 2, 3
+    discriminable_value 2, 3
   end
 
   class CrazyOptionProperty < OptionProperty
-    discriminable_as 4, 5
+    discriminable_value 4, 5
   end
 
   def setup

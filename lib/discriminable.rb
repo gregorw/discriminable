@@ -48,15 +48,15 @@ module Discriminable
     alias discriminable_on discriminable_attribute
 
     # Specify the values the subclass corresponds to.
-    def discriminable_as(*values)
-      raise "Only subclasses should specify .discriminable_as" if base_class?
+    def discriminable_value(*values)
+      raise "Only subclasses should specify .discriminable_value" if base_class?
 
       self._discriminable_values = values.map do |value|
         value.instance_of?(Symbol) ? value.to_s : value
       end
     end
-    alias discriminable_value discriminable_as
-    alias discriminable_values discriminable_as
+    alias discriminable_values discriminable_value
+    alias discriminable_as discriminable_value
 
     # This is the value of the discriminable attribute
     def sti_name

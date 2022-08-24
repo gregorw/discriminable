@@ -11,15 +11,15 @@ class TestOpenClosedPrinciple < Case
   end
 
   class ValueProperty < Property
-    discriminable_as :value
+    discriminable_value :value
   end
 
   class OptionProperty < Property
-    discriminable_as :single_option, :multi_option
+    discriminable_value :single_option, :multi_option
   end
 
   class RangeProperty < Property
-    discriminable_as :range
+    discriminable_value :range
   end
 
   def setup
