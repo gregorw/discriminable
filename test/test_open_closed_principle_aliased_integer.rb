@@ -9,7 +9,7 @@ class TestOpenClosedPrincipleAliasedInteger < Case
     alias_attribute :kind, :kind_with_some_postfix
 
     # No enum this time
-    discriminable_by :kind
+    discriminable_attribute :kind
   end
 
   class NumberProperty < Property

@@ -7,7 +7,7 @@ class TestEnum < Case
     include Discriminable
 
     enum state: { open: 0, completed: 1 }
-    discriminable_by :state
+    discriminable_attribute :state
   end
 
   class Cart < Order

@@ -7,7 +7,7 @@ class TestOpenClosedPrinciple < Case
     include Discriminable
 
     enum type: { value: 0, single_option: 1, multi_option: 2, range: 3 }
-    discriminable_by :type
+    discriminable_attribute :type
   end
 
   class ValueProperty < Property

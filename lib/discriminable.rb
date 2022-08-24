@@ -17,7 +17,7 @@ require "active_support"
 # class Customer < ActiveRecord::Base
 #   include Discriminable
 #
-#   discriminable_by :state
+#   discriminable_attribute :state
 # end
 #
 module Discriminable
@@ -35,8 +35,8 @@ module Discriminable
   # class methods (plus some aliases).
   module ClassMethods
     # Specify the attribute/column at the root class to use for discrimination.
-    def discriminable_by(attribute)
-      raise "Subclasses should not override .discriminable_by" unless base_class?
+    def discriminable_attribute(attribute)
+      raise "Subclasses should not override .discriminable_attribute" unless base_class?
 
       self._discriminable_map ||= _discriminable_map_memoized
       self._discriminable_inverse_map ||= _discriminable_inverse_map_memoized
@@ -44,8 +44,8 @@ module Discriminable
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
     end
-    alias discriminable_attribute discriminable_by
-    alias discriminable_on discriminable_by
+    alias discriminable_by discriminable_attribute
+    alias discriminable_on discriminable_attribute
 
     # Specify the values the subclass corresponds to.
     def discriminable_as(*values)
