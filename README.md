@@ -118,6 +118,15 @@ Note that when creating new records with e.g. `OptionProperty.create` a _default
 
 Rails 5+ is required.
 
+Also, in to make this work in `development` environment, the class hierarchy needs to be loaded. You can do this like so in your `development.rb` file:
+
+```ruby
+config.eager_load_paths += Dir['app/models/**/*.rb']
+ActionDispatch::Reloader.to_prepare do
+  Dir['app/models/**/*.rb'].each { |file| require_dependency file }
+end
+```
+
 
 ## Contributing
 
