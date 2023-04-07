@@ -3,19 +3,12 @@
 require "helper"
 
 class TestOn < Case
-  class Property < ActiveRecord::Base
-    include Discriminable
-
-    discriminable_on :type
+  class Property < DiscriminableModel
+    discriminable_attribute :type, number: "Number", %i[text string] => "Text"
   end
 
-  class Number < Property
-    discriminable_value :number
-  end
-
-  class Text < Property
-    discriminable_values :text, :string
-  end
+  class Number < Property; end
+  class Text < Property; end
 
   def setup
     ActiveRecord::Schema.define do

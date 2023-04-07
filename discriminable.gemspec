@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "Discriminable Rails Models"
   spec.description = "A Ruby gem that implements single-table inheritance (STI) for ActiveRecord " \
-                     "models using string, integer and boolean column types."
+                     "any existing attribute."
   spec.homepage = "https://github.com/gregorw/discriminable"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 2.6.0"

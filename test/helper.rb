@@ -18,3 +18,9 @@ ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:"
 ActiveRecord::Base.logger = Logger.new($stdout) if ENV.fetch("LOG", false)
 
 Minitest::Reporters.use! [Minitest::Reporters::DefaultReporter.new(color: true)]
+
+class DiscriminableModel < ActiveRecord::Base
+  include Discriminable
+  self.store_full_sti_class = false
+  self.abstract_class = true
+end

@@ -3,15 +3,11 @@
 require "helper"
 
 class TestBoolean < Case
-  class Response < ActiveRecord::Base
-    include Discriminable
-
-    discriminable_attribute :affirmative
+  class Response < DiscriminableModel
+    discriminable_attribute :affirmative, true => "Yes"
   end
 
-  class Yes < Response
-    discriminable_value true
-  end
+  class Yes < Response; end
 
   def setup
     ActiveRecord::Schema.define do

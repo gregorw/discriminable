@@ -26,49 +26,52 @@ module Discriminable
   included do
     class_attribute :_discriminable_map, instance_writer: false
     class_attribute :_discriminable_inverse_map, instance_writer: false
-    class_attribute :_discriminable_values, instance_writer: false
   end
 
-  # This adds
-  # - `discriminable_attribute` and
-  # - `discriminalbe_value`
-  # class methods (plus some aliases).
+  # Add some docs
   module ClassMethods
-    # Specify the attribute/column at the root class to use for discrimination.
-    def discriminable_attribute(attribute)
-      raise "Subclasses should not override .discriminable_attribute" unless base_class?
+    # When dealing with legacy databases or databases that are shared by third-party systems,
+    # the classic Rails STI approach with type column and class names in the database is not always possible.
+    # This is where `discriminable_attribute` comes in. It allows you to use a different attribute with a user
+    # defined value / class name mapping.
+    #
+    # Example:
+    #
+    # class Company < ActiveRecord::Base
+    #   discriminable_attribute :priority, 1 => "PriorityCustomer", [2, 3] => "Customer"
+    # end
+    def discriminable_attribute(attribute, **map)
+      raise "Subclasses are not allowed to override .discriminable_attribute" unless base_class?
 
-      self._discriminable_map ||= _discriminable_map_memoized
-      self._discriminable_inverse_map ||= _discriminable_inverse_map_memoized
+      # E.g. { value: "ClassName" }
+      self._discriminable_map = flatten_keys(map).with_indifferent_access
+
+      # Use first key as default discriminator
+      # { a: "C", b: "C" }.invert => { "C" => :b }
+      # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
+      # E.g. { "ClassName" => :value }
+      self._discriminable_inverse_map = map.to_a.reverse.to_h.invert
 
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
     end
-    alias discriminable_by discriminable_attribute
-    alias discriminable_on discriminable_attribute
-
-    # Specify the values the subclass corresponds to.
-    def discriminable_value(*values)
-      raise "Only subclasses should specify .discriminable_value" if base_class?
-
-      self._discriminable_values = values.map do |value|
-        value.instance_of?(Symbol) ? value.to_s : value
-      end
-    end
-    alias discriminable_values discriminable_value
-    alias discriminable_as discriminable_value
 
     # This is the value of the discriminable attribute
     def sti_name
-      _discriminable_inverse_map[name]
+      _discriminable_inverse_map[super]
+    end
+
+    # Returns the value to be stored in the inheritance column for STI.
+    def sti_name_default
+      store_full_sti_class && store_full_class_name ? name : name.demodulize
     end
 
     def sti_names
-      ([self] + descendants).flat_map(&:_discriminable_values)
+      ([self] + descendants).flat_map(&:sti_values)
     end
 
     def type_condition(table = arel_table)
-      return super unless _discriminable_values.present?
+      return super unless sti_values.present?
 
       sti_column = table[inheritance_column]
       predicate_builder.build(sti_column, sti_names)
@@ -80,7 +83,28 @@ module Discriminable
       super type_name
     end
 
+    def sti_values
+      _discriminable_map.select do |sti_value, class_name|
+        sti_value if class_name == sti_name_default
+      end.keys.flatten
+    end
+
     private
+
+    # We want to support mapping multiple values to a class name at once.
+    # Therefore we need to flatten the multiple keys. I.e. change
+    # { 1 => "PriorityCustomer", [2, 3] => "Customer" }
+    # to
+    # { 1 => "PriorityCustomer", 2 => "Customer", 3 => "Customer" }
+    def flatten_keys(hash)
+      hash.keys.select { |key| key.is_a?(Array) }.each do |values|
+        values.each do |value|
+          hash[value] = hash[values]
+        end
+        hash.delete(values)
+      end
+      hash
+    end
 
     # See active_record/inheritance.rb
     def subclass_from_attributes(attrs)
@@ -89,18 +113,6 @@ module Discriminable
 
       value = _discriminable_value(attrs)
       sti_class_for(value)
-    end
-
-    def _discriminable_map_memoized
-      Hash.new do |map, value|
-        map[value] = descendants.detect { |d| d._discriminable_values.include? value }&.name
-      end
-    end
-
-    def _discriminable_inverse_map_memoized
-      Hash.new do |map, value|
-        map[value] = value.constantize._discriminable_values&.first
-      end
     end
 
     def _discriminable_value(attrs)
