@@ -7,11 +7,11 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/maintainability)](https://codeclimate.com/github/gregorw/discriminable/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/94041c5f946b64040368/test_coverage)](https://codeclimate.com/github/gregorw/discriminable/test_coverage)
 
-This is a Ruby gem that implements single-table inheritance (STI) for ActiveRecord models using string, integer and boolean column types.
+This is a Ruby gem that implements single-table inheritance (STI) for ActiveRecord using string, integer and boolean column types.
 
-In other words, it allows to use any (existing) model attribute to discriminate between different subclasses in your class hierarchy. This makes storing class names in a `type` column redundant.
+In other words, it allows you to use _any_ existing model attribute to discriminate between different subclasses in your class hierarchy. This is especially useful when dealing with **legacy databases** or **third-party systems**. Anytime you cannot use the default “inheritance column / class name” combo—`discriminable` is your friend.
 
-Also, it supports aliased attributes and _multiple_ values per subclass.
+It also supports aliased attributes and _multiple_ values per subclass.
 
 ## Installation
 
@@ -118,14 +118,7 @@ Note that when creating new records with e.g. `OptionProperty.create` a _default
 
 Rails 5+ is required.
 
-Also, in order to make this work in `development` environment the class hierarchy needs to be loaded. You can do this like so in your `development.rb` file:
-
-```ruby
-config.eager_load_paths += Dir['app/models/**/*.rb']
-ActionDispatch::Reloader.to_prepare do
-  Dir['app/models/**/*.rb'].each { |file| require_dependency file }
-end
-```
+Also, in order to make this work in `development` environment the class hierarchy needs to be loaded.
 
 
 ## Contributing
@@ -147,6 +140,7 @@ The idea for this Gem was influenced by [“Bye Bye STI, Hello Discriminable Mod
 See also:
 
 - Rails [single table inheritance](https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html) and [DelegatedType](https://api.rubyonrails.org/classes/ActiveRecord/DelegatedType.html)
-- Java [JPA discrimanator](https://openjpa.apache.org/builds/1.0.2/apache-openjpa-1.0.2/docs/manual/jpa_overview_mapping_discrim.html)
-- Python [model inheritance](https://docs.djangoproject.com/en/4.0/topics/db/models/#model-inheritance-1)
+- Sequel [single-table inheritance plugin](https://sequel.jeremyevans.net/rdoc-plugins/classes/Sequel/Plugins/SingleTableInheritance.html)
 - [Discriminator](https://github.com/gdpelican/discriminator) gem.
+- Java [JPA discrimanator](https://openjpa.apache.org/builds/1.0.2/apache-openjpa-1.0.2/docs/manual/jpa_overview_mapping_discrim.html)
+- Python [Django model inheritance](https://docs.djangoproject.com/en/4.0/topics/db/models/#model-inheritance-1) and [proxy](https://dev.to/zachtylr21/model-inheritance-in-django-m0j)
