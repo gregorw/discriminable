@@ -3,16 +3,12 @@
 require "helper"
 
 class TestEnum < Case
-  class Order < ActiveRecord::Base
-    include Discriminable
-
+  class Order < DiscriminableModel
     enum state: { open: 0, completed: 1 }
-    discriminable_attribute :state
+    discriminable_attribute :state, open: "Cart"
   end
 
-  class Cart < Order
-    discriminable_value :open
-  end
+  class Cart < Order; end
 
   def setup
     ActiveRecord::Schema.define do
@@ -24,7 +20,7 @@ class TestEnum < Case
 
   def test_class_methods
     assert_equal Order.inheritance_column, "state"
-    assert_equal Cart.sti_name, "open"
+    assert_equal Cart.sti_name, :open
   end
 
   def test_count

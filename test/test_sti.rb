@@ -4,13 +4,11 @@ require "helper"
 
 class TestSti < Case
   class Order < ActiveRecord::Base
+    self.store_full_sti_class = false
   end
 
-  class Cart < Order
-  end
-
-  class Invoice < Order
-  end
+  class Cart < Order; end
+  class Invoice < Order; end
 
   def setup
     ActiveRecord::Schema.define do
@@ -22,8 +20,8 @@ class TestSti < Case
 
   def test_class_methods
     assert_equal Order.inheritance_column, "type"
-    assert_equal Order.sti_name, "TestSti::Order"
-    assert_equal Cart.sti_name, "TestSti::Cart"
+    assert_equal Order.sti_name, "Order"
+    assert_equal Cart.sti_name, "Cart"
   end
 
   def test_count
@@ -36,14 +34,14 @@ class TestSti < Case
   def test_loading
     Order.create
     Cart.create
-    assert_instance_of TestSti::Order, Order.first
-    assert_instance_of TestSti::Cart, Cart.first
-    assert_instance_of TestSti::Cart, Order.where(type: "TestSti::Cart").first
+    assert_instance_of Order, Order.first
+    assert_instance_of Cart, Cart.first
+    assert_instance_of Cart, Order.where(type: "Cart").first
   end
 
   def test_creating_and_building
-    assert_instance_of TestSti::Cart, Order.where(type: "TestSti::Cart").build
-    assert_instance_of TestSti::Cart, Order.new(type: "TestSti::Cart")
+    assert_instance_of Cart, Order.where(type: "Cart").build
+    assert_instance_of Cart, Order.new(type: "Cart")
   end
 
   def test_changes
@@ -52,14 +50,14 @@ class TestSti < Case
 
     # See https://api.rubyonrails.org/classes/ActiveRecord/Inheritance.html
     assert_predicate Cart.new, :changed?
-    assert_equal Cart.new.changes, "type" => [nil, "TestSti::Cart"]
+    assert_equal Cart.new.changes, "type" => [nil, "Cart"]
   end
 
   def test_becomes
     cart = Cart.create
     invoice = cart.becomes!(Invoice)
     invoice.save
-    assert_instance_of TestSti::Invoice, invoice
-    assert_instance_of TestSti::Invoice, invoice.reload
+    assert_instance_of Invoice, invoice
+    assert_instance_of Invoice, invoice.reload
   end
 end

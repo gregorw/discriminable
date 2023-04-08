@@ -2,27 +2,20 @@
 
 require "helper"
 
-class TestOpenClosedPrincipleAliasedInteger < Case
-  class Property < ActiveRecord::Base
-    include Discriminable
-
+class TestAliasedInteger < Case
+  class Property < DiscriminableModel
     alias_attribute :kind, :kind_with_some_postfix
+    self.store_full_sti_class = true
 
-    # No enum this time
-    discriminable_attribute :kind
+    discriminable_attribute :kind,
+                            1 => "TestAliasedInteger::NumberProperty",
+                            [2, 3] => "TestAliasedInteger::OptionProperty",
+                            [4, 5] => "TestAliasedInteger::CrazyOptionProperty"
   end
 
-  class NumberProperty < Property
-    discriminable_value 1
-  end
-
-  class OptionProperty < Property
-    discriminable_value 2, 3
-  end
-
-  class CrazyOptionProperty < OptionProperty
-    discriminable_value 4, 5
-  end
+  class NumberProperty < Property; end
+  class OptionProperty < Property; end
+  class CrazyOptionProperty < OptionProperty; end
 
   def setup
     ActiveRecord::Schema.define do

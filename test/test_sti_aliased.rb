@@ -8,8 +8,7 @@ class TestStiAliased < Case
     alias_attribute :type, :type_with_some_postfix
   end
 
-  class Cart < Order
-  end
+  class Cart < Order; end
 
   def setup
     ActiveRecord::Schema.define do

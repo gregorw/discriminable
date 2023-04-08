@@ -3,20 +3,13 @@
 require "helper"
 
 class TestEnumMultiple < Case
-  class Order < ActiveRecord::Base
-    include Discriminable
-
+  class Order < DiscriminableModel
     enum state: { open: 0, completed: 1, invoiced: 2, reminded: 3 }
-    discriminable_attribute :state
+    discriminable_attribute :state, open: "Cart", %i[invoiced reminded] => "Invoice"
   end
 
-  class Cart < Order
-    discriminable_value :open
-  end
-
-  class Invoice < Order
-    discriminable_value :invoiced, :reminded
-  end
+  class Cart < Order; end
+  class Invoice < Order; end
 
   def setup
     ActiveRecord::Schema.define do
@@ -27,7 +20,7 @@ class TestEnumMultiple < Case
   end
 
   def test_sti_name_default
-    assert_equal Invoice.sti_name, "invoiced"
+    assert_equal Invoice.sti_name, :invoiced
   end
 
   def test_default_enum_type
