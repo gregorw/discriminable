@@ -26,6 +26,7 @@ module Discriminable
   included do
     class_attribute :_discriminable_map, instance_writer: false
     class_attribute :_discriminable_inverse_map, instance_writer: false
+    class_attribute :_preloaded, instance_writer: false
   end
 
   # Add some docs
@@ -87,6 +88,20 @@ module Discriminable
       _discriminable_map.select do |sti_value, class_name|
         sti_value if class_name == sti_name_default
       end.keys.flatten
+    end
+
+    # See https://guides.rubyonrails.org/autoloading_and_reloading_constants.html#single-table-inheritance
+    def descendants
+      unless _preloaded
+        _discriminable_map.values.flatten.each do |klass|
+          klass&.constantize
+        rescue NameError
+          # Class name could not be autoloaded / constantized.
+        end
+        self._preloaded = true
+      end
+
+      super
     end
 
     private
