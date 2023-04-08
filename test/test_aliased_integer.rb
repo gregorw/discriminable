@@ -5,11 +5,12 @@ require "helper"
 class TestAliasedInteger < Case
   class Property < DiscriminableModel
     alias_attribute :kind, :kind_with_some_postfix
+    self.store_full_sti_class = true
 
     discriminable_attribute :kind,
-                            1 => "NumberProperty",
-                            [2, 3] => "OptionProperty",
-                            [4, 5] => "CrazyOptionProperty"
+                            1 => "TestAliasedInteger::NumberProperty",
+                            [2, 3] => "TestAliasedInteger::OptionProperty",
+                            [4, 5] => "TestAliasedInteger::CrazyOptionProperty"
   end
 
   class NumberProperty < Property; end

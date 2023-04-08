@@ -5,8 +5,7 @@ require "helper"
 class TestProperties < Case
   class Property < DiscriminableModel
     enum type: { value: 0, single_option: 1, multi_option: 2, range: 3 }
-    discriminable_attribute :type, value: "Value", single_option: "Option", multi_option: "Option",
-                                   range: "Range"
+    discriminable_attribute :type, value: "Value", %i[single_option multi_option] => "Option", range: "Range"
   end
 
   class Value < Property; end
