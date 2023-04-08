@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+## [3.0.1](https://github.com/gregorw/discriminable/compare/v3.0.0...v3.0.1) (2023-04-08)
+
+
+### Bug Fixes
+
+* preloading ([78d60d6](https://github.com/gregorw/discriminable/commit/78d60d6fafae5ba04c6feba60fa1c35a3c98ef03))
+* use top level syntax ([b774b58](https://github.com/gregorw/discriminable/commit/b774b58c26488b22287b8ed92c30da93d58c73ef))
+
 ## [3.0.0](https://github.com/gregorw/discriminable/compare/v2.2.5...v3.0.0) (2022-08-21)
 
 
