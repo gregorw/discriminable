@@ -24,9 +24,9 @@ module Discriminable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :_discriminable_map, instance_writer: false
-    class_attribute :_discriminable_inverse_map, instance_writer: false
-    class_attribute :_preloaded, instance_writer: false
+    class_attribute :discriminable_map, instance_writer: false
+    class_attribute :discriminable_inverse_map, instance_writer: false
+    class_attribute :preloaded_descendents, instance_writer: false
   end
 
   # Add some docs
@@ -45,13 +45,13 @@ module Discriminable
       raise "Subclasses are not allowed to override .discriminable_attribute" unless base_class?
 
       # E.g. { value: "ClassName" }
-      self._discriminable_map = flatten_keys(map).with_indifferent_access
+      self.discriminable_map = flatten_keys(map).with_indifferent_access
 
       # Use first key as default discriminator
       # { a: "C", b: "C" }.invert => { "C" => :b }
       # { a: "C", b: "C" }.to_a.reverse.to_h.invert => { "C" => :a }
       # E.g. { "ClassName" => :value }
-      self._discriminable_inverse_map = map.to_a.reverse.to_h.invert
+      self.discriminable_inverse_map = map.to_a.reverse.to_h.invert
 
       attribute = attribute.to_s
       self.inheritance_column = attribute_aliases[attribute] || attribute
@@ -59,7 +59,7 @@ module Discriminable
 
     # This is the value of the discriminable attribute
     def sti_name
-      _discriminable_inverse_map[super]
+      discriminable_inverse_map[super]
     end
 
     # Returns the value to be stored in the inheritance column for STI.
@@ -79,26 +79,26 @@ module Discriminable
     end
 
     def sti_class_for(value)
-      return self unless (type_name = _discriminable_map[value])
+      return self unless (type_name = discriminable_map[value])
 
       super type_name
     end
 
     def sti_values
-      _discriminable_map.select do |sti_value, class_name|
+      discriminable_map.select do |sti_value, class_name|
         sti_value if class_name == sti_name_default
       end.keys.flatten
     end
 
     # See https://guides.rubyonrails.org/autoloading_and_reloading_constants.html#single-table-inheritance
     def descendants
-      unless _preloaded
-        _discriminable_map.values.flatten.each do |klass|
+      unless preloaded_descendents
+        discriminable_map.values.flatten.each do |klass|
           klass&.constantize
         rescue NameError
           # Class name could not be autoloaded / constantized.
         end
-        self._preloaded = true
+        self.preloaded_descendents = true
       end
 
       super
